@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 class Background extends StatelessWidget {
 
-  final boxDecoration = BoxDecoration(
+  final boxDecoration = const BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
-        stops: [0.2, 0.8],
+        stops: [0.5, 2],
         colors: [
-          Color(0xff2E305F),
-          Color(0xff202333)
+          Color.fromARGB(246, 49, 53, 185),
+          Color.fromARGB(255, 43, 55, 122),
         ]
       )
   );
@@ -20,13 +20,12 @@ class Background extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Purple Gradinet
+        // gradiante morado
         Container(decoration: boxDecoration ),
-
-        // Pink box
+        // caja fondo
         Positioned(
-          top: -100,
-          left: -30,
+          top: -10,
+          left: -10,
           child: _PinkBox()
         ),
       ],
@@ -34,20 +33,19 @@ class Background extends StatelessWidget {
   }
 }
 
-
 class _PinkBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Transform.rotate(
       angle: -pi / 5,
       child: Container(
-        width: 360,
-        height: 360,
+        width: 320,
+        height: 320,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(80),
-          gradient: LinearGradient(
-            colors: [
-              Color.fromRGBO(236, 98, 188, 1),
+          gradient:const LinearGradient(
+            colors:[
+              Color.fromRGBO(236, 148, 98, 1),
               Color.fromRGBO(241, 142, 172, 1),
             ]
           )

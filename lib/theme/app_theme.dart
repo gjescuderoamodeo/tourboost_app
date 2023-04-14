@@ -6,7 +6,7 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData.light().copyWith(
       primaryColor: Colors.indigo,
       appBarTheme: const AppBarTheme(
-          color: Color.fromARGB(255, 140, 170, 83), elevation: 0),
+          color: Color.fromARGB(255, 73, 32, 233), elevation: 0),
       //color botones
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(

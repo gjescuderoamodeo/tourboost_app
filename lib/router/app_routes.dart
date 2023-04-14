@@ -12,7 +12,7 @@ class AppRoutes {
         route: 'home',
         name: 'Home Screen',
         screen: HomeScreen(),
-        icon: Icons.hail),
+        icon: Icons.home),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {

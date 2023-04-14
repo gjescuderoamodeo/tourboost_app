@@ -6,39 +6,20 @@ class CardTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Table(
-      children: [
+      //opciones disponible app
+      children: const [
         TableRow(
           children: [
-            _SigleCard( color: Colors.blue, icon: Icons.border_all, text: 'General' ),
-            _SigleCard( color: Colors.pinkAccent, icon: Icons.car_rental, text: 'Transport' ),
+            _SigleCard( color: Color.fromARGB(255, 34, 188, 85), icon: Icons.map_sharp, text: 'Mapa' ),
+            _SigleCard( color: Colors.pinkAccent, icon: Icons.hotel_sharp, text: 'Hoteles' ),
           ]
-        ),
-
+        ), 
         TableRow(
           children: [
-            _SigleCard( color: Colors.purple, icon: Icons.shop, text: 'Shopping' ),
-            _SigleCard( color: Colors.purpleAccent, icon: Icons.cloud, text: 'Bill' ),
+            _SigleCard( color: Color.fromARGB(255, 203, 186, 0), icon: Icons.star_purple500_outlined, text: 'Marcadores favoritos' ),
+            _SigleCard( color: Colors.pinkAccent, icon: Icons.hotel_rounded, text: 'Mis reservas hotel' ),
           ]
         ),
-
-        TableRow(
-          children: [
-            _SigleCard( color: Colors.deepPurple, icon: Icons.movie, text: 'Entertainment' ),
-            _SigleCard( color: Colors.pinkAccent, icon: Icons.food_bank_outlined, text: 'Grocery' ),
-          ]
-        ),
-
-        TableRow(
-          children: [
-            _SigleCard( color: Colors.blue, icon: Icons.border_all, text: 'General' ),
-            _SigleCard( color: Colors.pinkAccent, icon: Icons.car_rental, text: 'Transport' ),
-          ]
-        ),
-
-        
-
-        
-
       ],
     );
   }
@@ -99,7 +80,7 @@ class _CardBackground extends StatelessWidget {
               child: Container(
                 height: 180,
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(62, 66, 107, 0.7),
+                  color: const Color.fromRGBO(62, 66, 107, 0.7),
                   borderRadius: BorderRadius.circular(20)
                 ),
                 child: this.child,

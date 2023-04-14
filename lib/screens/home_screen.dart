@@ -9,6 +9,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 2,
+      ),
       body: Stack(
         children: [
           // Background
@@ -24,16 +27,13 @@ class HomeScreen extends StatelessWidget {
 
 class _HomeBody extends StatelessWidget {
 
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-
           // Titulos
           PageTitle(),
-
           // Card Table
           CardTable(),
         ],
