@@ -4,7 +4,7 @@ import '../models/models.dart';
 import '../screens/screens.dart';
 
 class AppRoutes {
-  static const initialRoute = 'home';
+  static const initialRoute = 'map';
 
   //para tenerlo más bonito
   static final menuOptions = <MenuOption>[
@@ -12,6 +12,11 @@ class AppRoutes {
         route: 'home',
         name: 'Home Screen',
         screen: HomeScreen(),
+        icon: Icons.home),
+    MenuOption(
+        route: 'map',
+        name: 'map Screen',
+        screen: MapScreen(),
         icon: Icons.home),
   ];
 
