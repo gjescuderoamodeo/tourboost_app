@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import '../models/models.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 
 class MapScreen extends StatefulWidget {
   @override
@@ -10,7 +13,23 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  final LatLng _center = const LatLng(37.356986424774405, -6.053150628892014);
+  final LatLng _center = const LatLng(40.416775, -3.70379);
+
+  //obtener lugares api
+  List<Lugar> lugares = [];
+
+  Future<void> _getLugares() async {
+    final response = await http.get(Uri.parse('https://tour-boost-api.vercel.app/lugar'));
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      lugares = parsed.map<Lugar>((json) => Lugar.fromJson(json)).toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load lugares');
+    }
+  }
+
+  //
   List<Marker> _markers = [];
   GoogleMapController? _controller;
 
@@ -20,15 +39,26 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
     super.initState();
     _requestLocationPermission();
+    //lugares    
+    _getLugares();
   }
 
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
 
     //marcadores a añadir
+    /*for (int i = 0; i < lugares.length; i++) {
+      addMarker(
+          MarkerId(lugares[i].idLugar as String),
+          LatLng(lugares[i].latitud, lugares[i].longitud),
+          lugares[i].tipoLugar,
+          lugares[i].nombrePais,
+          lugares[i].nombrePais);
+    } */
+
     addMarker(
-        MarkerId('procisa'),
-        LatLng(37.356986424774405, -6.053150628892014),
+        MarkerId('test'),
+        LatLng(lugares[0].latitud, lugares[0].longitud),
         'Procisa',
         'Poligono pisa, Sevilla.',
         'Pepe');    
