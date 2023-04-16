@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tourboost_app/providers/login_form_provider.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tourboost_app/theme/app_theme.dart';
 
 import 'package:tourboost_app/ui/input_decorations.dart';
 import 'package:tourboost_app/widgets/widgets.dart';
@@ -59,7 +60,7 @@ class _LoginForm extends StatelessWidget {
               autocorrect: false,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecorations.authInputDecoration(
-                  hintText: 'john.doe@gmail.com',
+                  hintText: 'su_correo@gmail.com',
                   labelText: 'Correo electrónico',
                   prefixIcon: Icons.alternate_email_rounded),
               onChanged: (value) => loginForm.email = value,
@@ -95,11 +96,11 @@ class _LoginForm extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)),
                 disabledColor: Colors.grey,
                 elevation: 0,
-                color: Colors.deepPurple,
+                color: AppTheme.terciary,
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(
-                      loginForm.isLoading ? 'Espere' : 'Ingresar',
+                      loginForm.isLoading ? 'Espere' : 'Acceder',
                       style: TextStyle(color: Colors.white),
                     )),
                 onPressed: loginForm.isLoading

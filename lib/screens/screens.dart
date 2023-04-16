@@ -2,5 +2,4 @@
 export 'package:tourboost_app/screens/home_screen.dart';
 export 'package:tourboost_app/screens/alert_screen.dart';
 export 'package:tourboost_app/screens/maps.dart';
-
-
+export 'package:tourboost_app/screens/login_screen.dart';
