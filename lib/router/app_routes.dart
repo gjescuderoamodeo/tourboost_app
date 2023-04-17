@@ -22,6 +22,11 @@ class AppRoutes {
         name: 'login Screen',
         screen: LoginScreen(),
         icon: Icons.login),
+    MenuOption(
+        route: 'registro',
+        name: 'registro users Screen',
+        screen: RegistroScreen(),
+        icon: Icons.receipt),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {

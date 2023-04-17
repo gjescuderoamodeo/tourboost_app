@@ -15,21 +15,21 @@ class LoginScreen extends StatelessWidget {
             child: SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: 250),
+          const SizedBox(height: 250),
           CardContainer(
               child: Column(
             children: [
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text('Login', style: Theme.of(context).textTheme.headline4),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ChangeNotifierProvider(
                   create: (_) => LoginFormProvider(), child: _LoginForm())
             ],
           )),
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           TextButton(
               onPressed: () =>
-                  Navigator.pushReplacementNamed(context, 'register'),
+                  Navigator.pushNamed(context, 'registro'), //página registro usuarios
               style: ButtonStyle(
                   overlayColor:
                       MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
