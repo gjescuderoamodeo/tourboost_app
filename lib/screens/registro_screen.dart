@@ -11,6 +11,20 @@ class RegistroScreen extends StatelessWidget {
     'correo': ''
   };
 
+  //validador email
+  String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Por favor ingrese su correo electrónico';
+    }
+
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(value)) {
+      return 'Por favor ingrese un correo electrónico válido';
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> myFormKey = GlobalKey<FormState>();
@@ -45,7 +59,9 @@ class RegistroScreen extends StatelessWidget {
               labelText: 'Email',
               hintText: "correo usuario",
               formProperty: 'correo',
+              keyboardType: TextInputType.emailAddress,
               formValues: formValues,
+              validator: validateEmail,
             ),
             const SizedBox(height: 20),
             //contraseña

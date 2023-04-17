@@ -5,6 +5,8 @@ class CustomInputField extends StatelessWidget {
   final String? labelText;
   final IconData? icon;
   final bool obscureText;
+  final TextInputType keyboardType;
+  final String? Function(String?)? validator;
 
   final String formProperty;
   final Map<String, String> formValues;
@@ -16,8 +18,15 @@ class CustomInputField extends StatelessWidget {
     this.icon,
     this.obscureText = false,
     required this.formProperty,
-    required this.formValues,
+    required this.formValues, this.keyboardType=TextInputType.text, this.validator,
   });
+
+  // Validador por defecto
+  static String? defaultValidator(String? value) {
+    if (value == null) return 'Campo requerido';
+    //minimo 3 letras
+    return value.length < 3 ? 'Mínimo 3 letras' : null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +35,7 @@ class CustomInputField extends StatelessWidget {
       textCapitalization: TextCapitalization.words,
       //poner el texto con puntitos (contraseña)
       obscureText: obscureText,
+      keyboardType: keyboardType,
       //tipo de teclado (movil)
       //keyboardType: TextInputType.emailAddress,
       //almacenar el valor
@@ -34,11 +44,7 @@ class CustomInputField extends StatelessWidget {
         formValues[formProperty] = value;
       },
       //validadores
-      validator: (value) {
-        if (value == null) return 'Campo requerido';
-        //minimo 3 letras
-        return value.length < 3 ? 'Minimo 3 letras' : null;
-      },
+      validator: validator ?? defaultValidator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
           hintText: hintText,
