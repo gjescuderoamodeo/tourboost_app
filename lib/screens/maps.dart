@@ -32,8 +32,8 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
-  //
-  List<Marker> _markers = [];
+  //lista marcadores
+  final List<Marker> _markers = [];
   GoogleMapController? _controller;
 
   TextEditingController _searchController = TextEditingController();
@@ -72,13 +72,6 @@ class _MapScreenState extends State<MapScreen> {
           lugares[i].nombrePais,
           lugares[i].nombrePais);
     }
-
-    /*addMarker(
-        MarkerId('test'),
-        LatLng(lugares[0].latitud, lugares[0].longitud),
-        'Procisa',
-        'Poligono pisa, Sevilla.',
-        'Pepe');  */
   }
 
   Future<void> _requestLocationPermission() async {
@@ -124,7 +117,7 @@ class _MapScreenState extends State<MapScreen> {
               myLocationButtonEnabled: true,
               initialCameraPosition: CameraPosition(
                 target: _center,
-                zoom: 15.0,
+                zoom: -200.0,
               ),
               markers: Set<Marker>.of(_markers),
             ),
