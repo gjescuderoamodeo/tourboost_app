@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourboost_app/widgets/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegistroScreen extends StatelessWidget {
   RegistroScreen({super.key});
@@ -79,7 +81,7 @@ class RegistroScreen extends StatelessWidget {
                 child: Center(child: Text("guardar")),
                 width: double.infinity,
               ),
-              onPressed: () {
+              onPressed: () async {
                 //quitar teclado (movil)
                 FocusScope.of(context).requestFocus(FocusNode());
 
@@ -87,6 +89,28 @@ class RegistroScreen extends StatelessWidget {
                 if (!myFormKey.currentState!.validate()) {
                   print('Formulario no válido');
                   return;
+                } else {
+                  //le envio los datos por post a la api
+                  final url =
+                      Uri.parse('https://tour-boost-api.vercel.app/usuario');
+                  final response = await http.post(
+                    url,
+                    headers: {"Content-Type": "application/json"},
+                    body: jsonEncode({
+                      'nombre': formValues['nombre']!,
+                      'apellidos': formValues['apellidos']!,
+                      'password': formValues['password']!,
+                      'correo': formValues['correo']!,
+                    }),
+                  );
+
+                  // Verificar la respuesta del servidor
+                  if (response.statusCode == 200) {
+                    print('Usuario creado correctamente');
+                  } else {
+                    print(
+                        'Error al crear el usuario: ${response.reasonPhrase}');
+                  }
                 }
                 print(formValues);
               },
