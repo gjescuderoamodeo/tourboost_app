@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tourboost_app/widgets/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegistroScreen extends StatelessWidget {
   RegistroScreen({super.key});
@@ -80,14 +81,21 @@ class RegistroScreen extends StatelessWidget {
               child: const SizedBox(
                 child: Center(child: Text("guardar")),
                 width: double.infinity,
-              ),
+              ),  
               onPressed: () async {
                 //quitar teclado (movil)
                 FocusScope.of(context).requestFocus(FocusNode());
 
                 //! para confiar que siempre le voy a mandar algo
                 if (!myFormKey.currentState!.validate()) {
-                  print('Formulario no válido');
+                  Fluttertoast.showToast(
+                      msg: "Formulario no válido",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: const Color.fromARGB(255, 239, 4, 4),
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                   return;
                 } else {
                   //le envio los datos por post a la api
@@ -106,10 +114,32 @@ class RegistroScreen extends StatelessWidget {
 
                   // Verificar la respuesta del servidor
                   if (response.statusCode == 200) {
-                    print('Usuario creado correctamente');
-                  } else {
-                    print(
-                        'Error al crear el usuario: ${response.reasonPhrase}');
+                    Fluttertoast.showToast(
+                      msg: "Usuario creado correctamente",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                  }else if(response.statusCode==409){
+                    Fluttertoast.showToast(
+                      msg: "Ese correo ya existe",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+                      textColor: const Color.fromARGB(255, 3, 3, 3),
+                      fontSize: 16.0);
+                  }else {
+                    Fluttertoast.showToast(
+                      msg: "Error al crear el usuario",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 3,
+                      backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                   }
                 }
                 print(formValues);

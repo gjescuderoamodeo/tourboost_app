@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   syncfusion_flutter_gauges: ^21.1.35
   observable: ^0.24.0
+  fluttertoast: ^8.0.7
 
   google_maps_flutter: ^2.2.5
   #google_maps_flutter_web: ^0.4.0+7
