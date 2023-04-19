@@ -7,41 +7,53 @@ import 'package:tourboost_app/theme/app_theme.dart';
 import 'package:tourboost_app/ui/input_decorations.dart';
 import 'package:tourboost_app/widgets/widgets.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: AuthBackground(
-            child: SingleChildScrollView(
-      child: Column(
-        children: [
-          const SizedBox(height: 250),
-          CardContainer(
-              child: Column(
-            children: [
-              const SizedBox(height: 10),
-              Text('Login', style: Theme.of(context).textTheme.headline4),
-              const SizedBox(height: 30),
-              ChangeNotifierProvider(
-                  create: (_) => LoginFormProvider(), child: _LoginForm())
-            ],
-          )),
-          const SizedBox(height: 50),
-          TextButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, 'registro'), //página registro usuarios
-              style: ButtonStyle(
-                  overlayColor:
-                      MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
-                  shape: MaterialStateProperty.all(StadiumBorder())),
-              child: Text(
-                'Crear una nueva cuenta',
-                style: TextStyle(fontSize: 18, color: Colors.black87),
-              )),
-          SizedBox(height: 50),
-        ],
+      body: Provider<AuthService>(
+        create: (_) => AuthService(),
+        child: AuthBackground(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 250),
+                CardContainer(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      Text('Login',
+                          style: Theme.of(context).textTheme.headline4),
+                      const SizedBox(height: 30),
+                      ChangeNotifierProvider(
+                        create: (_) => LoginFormProvider(),
+                        child: _LoginForm(),
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 50),
+                TextButton(
+                  onPressed: () => Navigator.pushNamed(context, 'registro'),
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(
+                        Colors.indigo.withOpacity(0.1)),
+                    shape: MaterialStateProperty.all(StadiumBorder()),
+                  ),
+                  child: const Text(
+                    'Crear una nueva cuenta',
+                    style: TextStyle(fontSize: 18, color: Colors.black87),
+                  ),
+                ),
+                SizedBox(height: 50),
+              ],
+            ),
+          ),
+        ),
       ),
-    )));
+    );
   }
 }
 
@@ -74,7 +86,7 @@ class _LoginForm extends StatelessWidget {
                     : 'El valor ingresado no luce como un correo';
               },
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             TextFormField(
               autocorrect: false,
               obscureText: true,
@@ -85,9 +97,9 @@ class _LoginForm extends StatelessWidget {
                   prefixIcon: Icons.lock_outline),
               onChanged: (value) => loginForm.password = value,
               validator: (value) {
-                return (value != null && value.length >= 6)
+                return (value != null && value.length >= 3)
                     ? null
-                    : 'La contraseña debe de ser de 6 caracteres';
+                    : 'La contraseña debe de ser de 3 caracteres mínimo';
               },
             ),
             SizedBox(height: 30),
@@ -107,23 +119,32 @@ class _LoginForm extends StatelessWidget {
                     ? null
                     : () async {
                         FocusScope.of(context).unfocus();
-                        final authService =
-                            Provider.of<AuthService>(context, listen: false);
+                        //final authService =
+                        //    Provider.of<AuthService>(context, listen: false);
+                        final AuthService authService = AuthService();
 
                         if (!loginForm.isValidForm()) return;
 
                         loginForm.isLoading = true;
 
                         // TODO: validar si el login es correcto
-                        final String? errorMessage = await authService.login(
-                            loginForm.email, loginForm.password);
 
-                        if (errorMessage == null) {
+                        String? login = await authService.login(
+                            loginForm.email, loginForm.password);   
+
+                        if (login != null) {
                           Navigator.pushReplacementNamed(context, 'home');
                         } else {
-                          // TODO: mostrar error en pantalla
-                          // print( errorMessage );
-                          NotificationsService.showSnackbar(errorMessage);
+                          Fluttertoast.showToast(
+                              msg: "correo o contraseña no válido",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 3,
+                              backgroundColor:
+                                  const Color.fromARGB(255, 239, 4, 4),
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                          //NotificationsService.showSnackbar(errorMessage);
                           loginForm.isLoading = false;
                         }
                       })

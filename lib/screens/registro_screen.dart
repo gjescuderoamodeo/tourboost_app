@@ -142,7 +142,6 @@ class RegistroScreen extends StatelessWidget {
                       fontSize: 16.0);
                   }
                 }
-                print(formValues);
               },
             )
           ]),
