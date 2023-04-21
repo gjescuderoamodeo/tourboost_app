@@ -4,4 +4,4 @@ export 'package:tourboost_app/screens/alert_screen.dart';
 export 'package:tourboost_app/screens/maps.dart';
 export 'package:tourboost_app/screens/login_screen.dart';
 export 'package:tourboost_app/screens/registro_screen.dart';
-
+export 'package:tourboost_app/screens/configuracion_screen.dart';

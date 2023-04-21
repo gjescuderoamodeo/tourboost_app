@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tourboost_app/screens/screens.dart';
 import '../widgets/widgets.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
@@ -28,6 +29,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   setState(() {
                     selectedMenu = item;
                   });
+
+                  //navegar a la pantalla de Configuración
+                  if (item == SampleItem.itemOne) {
+                    Navigator.pushNamed(context, 'configuracion');
+                  }
                 },
                 icon: const Icon(Icons.person),
                 itemBuilder: (BuildContext context) =>

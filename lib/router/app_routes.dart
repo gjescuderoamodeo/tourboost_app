@@ -3,7 +3,8 @@ import '../models/models.dart';
 import '../screens/screens.dart';
 
 class AppRoutes {
-  static const initialRoute = 'login';
+  //static const initialRoute = 'login';
+  static const initialRoute = 'home';
 
   //para tenerlo más bonito
   static final menuOptions = <MenuOption>[
@@ -27,6 +28,11 @@ class AppRoutes {
         name: 'registro users Screen',
         screen: RegistroScreen(),
         icon: Icons.receipt),
+    MenuOption(
+        route: 'configuracion',
+        name: 'configuracion Screen',
+        screen: ConfiguracionScreen(),
+        icon: Icons.room_preferences),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
