@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tourboost_app/screens/screens.dart';
+import '../services/services.dart';
 import '../widgets/widgets.dart';
 
 enum SampleItem { itemOne, itemTwo, itemThree }
@@ -33,6 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   //navegar a la pantalla de Configuración
                   if (item == SampleItem.itemOne) {
                     Navigator.pushNamed(context, 'configuracion');
+                  }
+                  //logout
+                  if (item == SampleItem.itemThree) {
+                    final AuthService authService = AuthService();
+                    authService.logout();
+
+                    Navigator.pushNamed(context, 'login');
                   }
                 },
                 icon: const Icon(Icons.person),
