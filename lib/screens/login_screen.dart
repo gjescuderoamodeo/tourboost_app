@@ -130,10 +130,16 @@ class _LoginForm extends StatelessWidget {
                         // TODO: validar si el login es correcto
 
                         String? login = await authService.login(
-                            loginForm.email, loginForm.password);   
+                            loginForm.email, loginForm.password);
 
                         if (login != null) {
-                          Navigator.pushReplacementNamed(context, 'home');
+                          bool admin =
+                              await authService.userAdmin(loginForm.email);
+                          if (admin) {
+                            Navigator.pushReplacementNamed(context, 'home2');
+                          } else {
+                            Navigator.pushReplacementNamed(context, 'home');
+                          }
                         } else {
                           Fluttertoast.showToast(
                               msg: "correo o contraseña no válido",

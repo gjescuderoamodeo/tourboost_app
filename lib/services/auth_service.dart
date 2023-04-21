@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -58,8 +59,23 @@ class AuthService extends ChangeNotifier {
       } else {
         return decodedResp['error']['message'];
       }
-    }else{
+    } else {
       return null;
+    }
+  }
+
+  Future<bool> userAdmin(String email) async {
+    final resp = await http.post(
+      Uri.parse('https://tour-boost-api.vercel.app/usuario/admin'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        'correo': email,
+      }),
+    );
+    if (resp.statusCode == 201) {
+      return true;
+    } else {
+      return false;
     }
   }
 
