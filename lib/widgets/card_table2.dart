@@ -7,17 +7,31 @@ class CardTable2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Table(
       //opciones disponible app
-      children: const [
-        TableRow(children: [
-          _SigleCard(
-              color: Color.fromARGB(255, 34, 188, 85),
-              icon: Icons.hotel,
-              text: 'Administración Hoteles'),
-          _SigleCard(
-              color: Colors.pinkAccent,
-              icon: Icons.public,
-              text: 'Administración Paises'),
-        ]),
+      children: [
+        TableRow(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, 'adminhotel');
+              },
+              child: const _SigleCard(
+                color: Color.fromARGB(255, 34, 188, 85),
+                icon: Icons.hotel,
+                text: 'Administración Hoteles',
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/adminPais');
+              },
+              child: const _SigleCard(
+                color: Colors.pinkAccent,
+                icon: Icons.public,
+                text: 'Administración Paises',
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
