@@ -14,25 +14,35 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
   //variable menú desplegable
   SampleItem? selectedMenu;
 
-  final options = const [
-    'Pepe',
-    'Luis',
-    'Felipe',
-    'Juan',
-  ];
-
-  final Hotel2 = [
+  final List<Map<String, dynamic>> data = [
     {
       "id": 1,
       "nombre": "pp",
-      "direccion": 'Direccion 1',
+      "direccion": "Direccion 1",
       "plazas": 33,
+      "telefono": "222-333-444-555"
+    },
+    {
+      "id": 2,
+      "nombre": "test",
+      "direccion": "Direccion 2",
+      "plazas": 333,
       "telefono": "222-333-444-555"
     }
   ];
 
   @override
   Widget build(BuildContext context) {
+    final List<Hotel> hoteles = data.map((hotelData) {
+      return Hotel(
+        id: hotelData['id'],
+        name: hotelData['nombre'],
+        direccion: hotelData['direccion'],
+        plazas: hotelData['plazas'],
+        telefono: hotelData['telefono'],
+      );
+    }).toList();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -133,8 +143,11 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context,
-                  'alert'); // <---- esta línea para navegar a la página 'alert'
+              //Navigator.pushNamed(context,
+              //    'alert'); // <---- esta línea para navegar a la página 'alert'
+              setState(() {
+                data.removeAt(rowIndex);
+              });
             },
             child: Container(
               color: Colors.redAccent, // <---- cambia el color a rojo
@@ -151,10 +164,10 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
             onTap: () {
               //Navigator.pushNamed(
               //    context, 'card'); // <----navegar a la página 'alert'
-              print(options[rowIndex]);
+              print(data[rowIndex]['id']);
             },
             child: Container(
-              color: Color.fromARGB(255, 134, 139, 133),
+              color: const Color.fromARGB(255, 134, 139, 133),
               child: const Center(
                 child: Icon(Icons.settings),
               ),
@@ -208,14 +221,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
           ),
         ],
         source: HotelDataSource(
-          hoteles: options
-              .map<Hotel>((name) => Hotel(
-                  id: options.indexOf(name),
-                  name: name,
-                  direccion: 'Direccion ' + options.indexOf(name).toString(),
-                  plazas: options.indexOf(name),
-                  telefono: "222-333-444-555"))
-              .toList(),
+          hoteles: hoteles,
         ),
       ),
     );
