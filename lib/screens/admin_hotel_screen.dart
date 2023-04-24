@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
+import 'package:tourboost_app/theme/app_theme.dart';
 
 class AdminHotelScreen extends StatefulWidget {
   const AdminHotelScreen({super.key});
@@ -13,6 +14,12 @@ class AdminHotelScreen extends StatefulWidget {
 class _AdminHotelScreenState extends State<AdminHotelScreen> {
   //variable menú desplegable
   SampleItem? selectedMenu;
+
+  final _formKey = GlobalKey<FormState>();
+  final _nombreController = TextEditingController();
+  final _direccionController = TextEditingController();
+  final _plazasController = TextEditingController();
+  final _telefonoController = TextEditingController();
 
   final List<Map<String, dynamic>> data = [
     {
@@ -110,18 +117,81 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
         //footer
         footerFrozenRowsCount: 1,
         footer: GestureDetector(
-          onDoubleTap: () {
+          onTap: () {
             showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Alerta'),
-                  content: Text('¡Has tocado el footer!'),
+                  title: Text('Crear nuevo hotel'),
+                  content: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextFormField(
+                          controller: _nombreController,
+                          decoration: InputDecoration(labelText: 'Nombre'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese el nombre';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        TextFormField(
+                          controller: _direccionController,
+                          decoration: InputDecoration(labelText: 'Dirección'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese la dirección';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        TextFormField(
+                          controller: _plazasController,
+                          decoration: InputDecoration(labelText: 'Plazas'),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese el número de plazas';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 15),
+                        TextFormField(
+                          controller: _telefonoController,
+                          decoration: InputDecoration(labelText: 'Teléfono'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese el teléfono';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   actions: [
                     TextButton(
                       child: Text('OK'),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        if (_formKey.currentState!.validate()) {
+                          final nuevoHotel = {
+                            'id': 23,
+                            'nombre': _nombreController.text,
+                            'direccion': _direccionController.text,
+                            'plazas': int.parse(_plazasController.text),
+                            'telefono': _telefonoController.text,
+                          };
+                          setState(() {
+                            //print(nuevoHotel);
+                            data.add(nuevoHotel);
+                          });
+                        }
                       },
                     ),
                   ],
@@ -130,11 +200,12 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
             );
           },
           child: Container(
-            color: Colors.blueGrey,
-            child: Center(
+            color: AppTheme.secundary,
+            child: const Center(
                 child: Text(
-              'FOOTER VIEW',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              'Crear nuevo hotel',
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             )),
           ),
         ),
