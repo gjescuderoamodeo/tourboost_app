@@ -22,7 +22,7 @@ class CardTable2 extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/adminPais');
+                Navigator.pushNamed(context, 'adminpais');
               },
               child: const _SigleCard(
                 color: Colors.pinkAccent,

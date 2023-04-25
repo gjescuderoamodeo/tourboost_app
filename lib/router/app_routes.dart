@@ -43,6 +43,11 @@ class AppRoutes {
         name: 'admin hotel Screen',
         screen: AdminHotelScreen(),
         icon: Icons.roofing),
+    MenuOption(
+        route: 'adminpais',
+        name: 'admin pais Screen',
+        screen: AdminPaisScreen(),
+        icon: Icons.roofing),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
