@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tourboost_app/services/services.dart';
 import '../models/models.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+
+enum SampleItem4 { itemOne, itemTwo, itemThree }
 
 class MapScreen extends StatefulWidget {
   @override
@@ -13,6 +16,9 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final LatLng _center = const LatLng(40.416775, -3.70379);
+
+  //variable menú desplegable
+  SampleItem4? selectedMenu;
 
   //obtener lugares api
   List<Lugar> lugares = [];
@@ -105,8 +111,63 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mapa'),
-        elevation: 0,
+        elevation: 2,
+        title: const Text("Tourboost Mapa"),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 5),
+            child: CircleAvatar(
+              child: PopupMenuButton<SampleItem4>(
+                initialValue: selectedMenu,
+                onSelected: (SampleItem4 item) {
+                  setState(() {
+                    selectedMenu = item;
+                  });
+
+                  //navegar a la pantalla de Configuración
+                  if (item == SampleItem4.itemOne) {
+                    Navigator.pushNamed(context, 'configuracion');
+                  }
+                  //logout
+                  if (item == SampleItem4.itemThree) {
+                    final AuthService authService = AuthService();
+                    authService.logout();
+
+                    Navigator.pushNamed(context, 'login');
+                  }
+                },
+                icon: const Icon(Icons.person),
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<SampleItem4>>[
+                  PopupMenuItem<SampleItem4>(
+                    value: SampleItem4.itemOne,
+                    child: Row(
+                      children: const [
+                        Text('Configuración'),
+                        SizedBox(width: 20),
+                        Icon(Icons.build_rounded, color: Colors.black)
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem<SampleItem4>(
+                    value: SampleItem4.itemTwo,
+                    child: Text('Item 2'),
+                  ),
+                  PopupMenuItem<SampleItem4>(
+                    value: SampleItem4.itemThree,
+                    child: Row(
+                      children: const [
+                        Text('Cerrar Sesión'),
+                        SizedBox(width: 20),
+                        Icon(Icons.exit_to_app, color: Colors.black)
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
       body: Column(
         children: [
