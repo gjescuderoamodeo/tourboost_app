@@ -43,7 +43,7 @@ class CardTable extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, 'map');
+              Navigator.pushNamed(context, 'reservas');
             },
             child: const _SigleCard(
               color: Color.fromARGB(255, 203, 186, 0),

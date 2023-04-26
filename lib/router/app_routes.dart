@@ -53,6 +53,11 @@ class AppRoutes {
         name: 'marcadores Screen',
         screen: MarcadoresScreen(),
         icon: Icons.star),
+    MenuOption(
+        route: 'reservas',
+        name: 'reservas Screen',
+        screen: ReservasScreen(),
+        icon: Icons.hotel),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
