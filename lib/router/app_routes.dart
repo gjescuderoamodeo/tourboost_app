@@ -4,7 +4,7 @@ import '../screens/screens.dart';
 
 class AppRoutes {
   //static const initialRoute = 'login';
-  static const initialRoute = 'home2';
+  static const initialRoute = 'home';
 
   //para tenerlo más bonito
   static final menuOptions = <MenuOption>[
@@ -48,6 +48,11 @@ class AppRoutes {
         name: 'admin pais Screen',
         screen: AdminPaisScreen(),
         icon: Icons.roofing),
+    MenuOption(
+        route: 'marcadores',
+        name: 'marcadores Screen',
+        screen: MarcadoresScreen(),
+        icon: Icons.star),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
