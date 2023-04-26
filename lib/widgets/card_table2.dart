@@ -32,6 +32,28 @@ class CardTable2 extends StatelessWidget {
             ),
           ],
         ),
+        TableRow(children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, 'adminmarcadores');
+            },
+            child: const _SigleCard(
+              color: Color.fromARGB(255, 239, 221, 23),
+              icon: Icons.star_purple500_outlined,
+              text: 'Administración marcadores',
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, 'marcadores');
+            },
+            child: const _SigleCard(
+              color: Color.fromARGB(255, 201, 6, 222),
+              icon: Icons.event_available_rounded,
+              text: 'Administración recomendaciones',
+            ),
+          ),
+        ]),
       ],
     );
   }
