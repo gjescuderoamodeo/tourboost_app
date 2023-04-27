@@ -12,3 +12,4 @@ export 'package:tourboost_app/screens/admin_pais_screen.dart';
 export 'package:tourboost_app/screens/marcadores_screen.dart';
 export 'package:tourboost_app/screens/reservas_screen.dart';
 export 'package:tourboost_app/screens/hoteles_screen.dart';
+export 'package:tourboost_app/screens/hotel_screen.dart';

@@ -67,7 +67,12 @@ class AppRoutes {
         route: 'hoteles',
         name: 'hoteles Screen',
         screen: HotelesScreen(),
-        icon: Icons.star),
+        icon: Icons.holiday_village),
+    MenuOption(
+        route: 'hotel',
+        name: 'hotel Screen',
+        screen: HotelScreen(),
+        icon: Icons.holiday_village_rounded),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {

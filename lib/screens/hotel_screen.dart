@@ -1,35 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
-import 'package:tourboost_app/theme/app_theme.dart';
 
-class HotelesScreen extends StatefulWidget {
-  const HotelesScreen({super.key});
+class HotelScreen extends StatefulWidget {
+  const HotelScreen({super.key});
+
+  //Text('Nombre del hotel: ${datos["nombre"]}'),
 
   @override
-  State<HotelesScreen> createState() => _HotelesScreenState();
+  State<HotelScreen> createState() => _HotelScreenState();
 }
 
-class _HotelesScreenState extends State<HotelesScreen> {
-  //variable menú desplegable
-  SampleItem? selectedMenu;
-
-  final List<Map<String, dynamic>> data = [
-    {
-      "nombre": "hotel1",
-    },
-    {
-      "nombre": "hotel2",
-    }
-  ];
-
+class _HotelScreenState extends State<HotelScreen> {
   @override
   Widget build(BuildContext context) {
+    //variable menú desplegable
+    SampleItem? selectedMenu;
+
+    //datos pasados de hoteles screen
+    final datos =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
-        title: const Text("Hoteles disponibles"),
+        title: Text(datos["nombre"]),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 5),
@@ -88,14 +83,30 @@ class _HotelesScreenState extends State<HotelesScreen> {
       ),
       body: ListView(
         children: [
-          ...data
-              .map((e) => ListTile(
-                  onTap: () {
-                    Navigator.pushNamed(context, 'hotel', arguments: e);
-                  },
-                  title: Text(e["nombre"]),
-                  trailing: const Icon(Icons.arrow_forward_ios_sharp)))
-              .toList()
+          ListTile(
+            title: const Text(
+              'Crear Reserva',
+              style: TextStyle(fontSize: 20),
+            ),
+            trailing: const Icon(Icons.add),
+            onTap: () {
+              // Navegar a la pantalla de creación de reservas
+            },
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          ),
+          ListTile(
+            title: const Text(
+              'Ver en el Mapa',
+              style: TextStyle(fontSize: 20),
+            ),
+            trailing: const Icon(Icons.map),
+            onTap: () {
+              // Navegar a la pantalla de visualización del mapa
+            },
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          ),
         ],
       ),
     );
