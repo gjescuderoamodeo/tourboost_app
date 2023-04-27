@@ -90,7 +90,7 @@ class _HotelScreenState extends State<HotelScreen> {
             ),
             trailing: const Icon(Icons.add),
             onTap: () {
-              // Navegar a la pantalla de creación de reservas
+              //reservas alert
             },
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
@@ -102,7 +102,7 @@ class _HotelScreenState extends State<HotelScreen> {
             ),
             trailing: const Icon(Icons.map),
             onTap: () {
-              // Navegar a la pantalla de visualización del mapa
+              //mapa screen
             },
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
