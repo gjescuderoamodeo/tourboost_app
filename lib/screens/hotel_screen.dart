@@ -12,6 +12,36 @@ class HotelScreen extends StatefulWidget {
 }
 
 class _HotelScreenState extends State<HotelScreen> {
+  //rango fecha
+  DateTimeRange? _selectedRange;
+
+//cuadro dialogo elegir fecha
+  Future<void> _presentDateRangePicker(BuildContext context) async {
+    //rango inicial
+    final initialDateRange = DateTimeRange(
+      start: DateTime.now(),
+      end: DateTime.now(),
+    );
+    final newDateRange = await showDateRangePicker(
+      context: context,
+      saveText: "Reservar hotel",
+      helpText: "Elige fecha inicio fin",
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      initialDateRange: _selectedRange ?? initialDateRange,
+    );
+    if (newDateRange == null) {
+      return;
+    }
+    setState(() {
+      _selectedRange = newDateRange;
+    });
+
+    //se ejecuta al darle a guardar
+    print('La fecha seleccionada es $_selectedRange');
+  }
+//
+
   @override
   Widget build(BuildContext context) {
     //variable menú desplegable
@@ -91,6 +121,7 @@ class _HotelScreenState extends State<HotelScreen> {
             trailing: const Icon(Icons.add),
             onTap: () {
               //reservas alert
+              _presentDateRangePicker(context);
             },
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
