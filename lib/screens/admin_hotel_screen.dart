@@ -1,8 +1,14 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../models/models.dart';
 
 class AdminHotelScreen extends StatefulWidget {
   const AdminHotelScreen({super.key});
@@ -21,7 +27,25 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
   final _plazasController = TextEditingController();
   final _telefonoController = TextEditingController();
 
-  final List<Map<String, dynamic>> data = [
+  //obtener hoteles api
+  List<Hotel> hoteles = [];
+
+  Future<void> _getHoteles() async {
+    final response =
+        await http.get(Uri.parse('https://tour-boost-api.vercel.app/hotel'));
+
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      hoteles = parsed.map<Hotel>((json) => Hotel.fromJson(json)).toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load hoteles');
+    }
+  }
+
+  /*final List<Map<String, dynamic>> data = [
     {
       "id": 1,
       "nombre": "pp",
@@ -36,11 +60,17 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
       "plazas": 333,
       "telefono": "222-333-444-555"
     }
-  ];
+  ];*/
+
+  @override
+  void initState() {
+    super.initState();
+    _getHoteles();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Hotel> hoteles = data.map((hotelData) {
+    /*final List<Hotel> hoteles = data.map((hotelData) {
       return Hotel(
         id: hotelData['id'],
         name: hotelData['nombre'],
@@ -48,7 +78,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
         plazas: hotelData['plazas'],
         telefono: hotelData['telefono'],
       );
-    }).toList();
+    }).toList();*/
 
     return Scaffold(
       appBar: AppBar(
@@ -189,7 +219,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                           };
                           setState(() {
                             //print(nuevoHotel);
-                            data.add(nuevoHotel);
+                            //data.add(nuevoHotel);
                           });
                         }
                       },
@@ -217,7 +247,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
               setState(() {
-                data.removeAt(rowIndex);
+                //data.removeAt(rowIndex);
               });
             },
             child: Container(
@@ -235,7 +265,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
             onTap: () {
               //Navigator.pushNamed(
               //    context, 'card'); // <----navegar a la página 'alert'
-              print(data[rowIndex]['id']);
+              //print(data[rowIndex]['id']);
             },
             child: Container(
               color: const Color.fromARGB(255, 134, 139, 133),
@@ -299,40 +329,25 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
   }
 }
 
-class Hotel {
-  const Hotel(
-      {required this.id,
-      required this.name,
-      required this.direccion,
-      required this.plazas,
-      required this.telefono});
-
-  final int id;
-  final String name;
-  final String direccion;
-  final int plazas;
-  final String telefono;
-}
-
 class HotelDataSource extends DataGridSource {
   HotelDataSource({required List<Hotel> hoteles}) {
     dataGridRows = hoteles
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
               DataGridCell<String>(
                 columnName: 'nombre',
-                value: dataGridRow.name,
+                value: dataGridRow.nombre,
               ),
               DataGridCell<String>(
                 columnName: 'direccion',
                 value: dataGridRow.direccion,
               ),
-              DataGridCell<int>(
+              DataGridCell<double>(
                 columnName: 'plazas',
-                value: dataGridRow.plazas,
+                value: dataGridRow.plazasTotales,
               ),
               DataGridCell<String>(
                 columnName: 'telefono',
-                value: dataGridRow.telefono,
+                value: dataGridRow.telefono_contacto,
               ),
             ]))
         .toList();
