@@ -6,6 +6,8 @@ import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/models.dart';
@@ -34,7 +36,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
     final response =
         await http.get(Uri.parse('https://tour-boost-api.vercel.app/hotel'));
 
-    print(response.body);
+    //print(response.body);
 
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -45,41 +47,56 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
     }
   }
 
-  /*final List<Map<String, dynamic>> data = [
-    {
-      "id": 1,
-      "nombre": "pp",
-      "direccion": "Direccion 1",
-      "plazas": 33,
-      "telefono": "222-333-444-555"
-    },
-    {
-      "id": 2,
-      "nombre": "test",
-      "direccion": "Direccion 2",
-      "plazas": 333,
-      "telefono": "222-333-444-555"
-    }
-  ];*/
-
   @override
   void initState() {
     super.initState();
     _getHoteles();
   }
 
+  //función asincrona crear hotel
+  void crearHotel() async {
+    final nuevoHotel = {
+      "idLugar": 2,
+      "plazasTotales": 50,
+      "plazasDisponibles": 25,
+      "direccion": "Calle 123, Ciudad",
+      "telefono_contacto": "1234567890",
+      "nombre": "Hotel Ejemplo"
+    };
+
+    final response = await http.post(
+      Uri.parse('https://tour-boost-api.vercel.app/hotel'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(nuevoHotel),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Hotel creado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al crear el Hotel",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
   @override
   Widget build(BuildContext context) {
-    /*final List<Hotel> hoteles = data.map((hotelData) {
-      return Hotel(
-        id: hotelData['id'],
-        name: hotelData['nombre'],
-        direccion: hotelData['direccion'],
-        plazas: hotelData['plazas'],
-        telefono: hotelData['telefono'],
-      );
-    }).toList();*/
-
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -152,7 +169,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text('Crear nuevo hotel'),
+                  title: const Text('Crear nuevo hotel'),
                   content: Form(
                     key: _formKey,
                     child: Column(
@@ -160,7 +177,8 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                       children: [
                         TextFormField(
                           controller: _nombreController,
-                          decoration: InputDecoration(labelText: 'Nombre'),
+                          decoration:
+                              const InputDecoration(labelText: 'Nombre'),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Por favor, ingrese el nombre';
@@ -171,7 +189,8 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                         const SizedBox(height: 15),
                         TextFormField(
                           controller: _direccionController,
-                          decoration: InputDecoration(labelText: 'Dirección'),
+                          decoration:
+                              const InputDecoration(labelText: 'Dirección'),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Por favor, ingrese la dirección';
@@ -182,7 +201,8 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                         const SizedBox(height: 15),
                         TextFormField(
                           controller: _plazasController,
-                          decoration: InputDecoration(labelText: 'Plazas'),
+                          decoration:
+                              const InputDecoration(labelText: 'Plazas'),
                           keyboardType: TextInputType.number,
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -194,7 +214,8 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                         const SizedBox(height: 15),
                         TextFormField(
                           controller: _telefonoController,
-                          decoration: InputDecoration(labelText: 'Teléfono'),
+                          decoration:
+                              const InputDecoration(labelText: 'Teléfono'),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Por favor, ingrese el teléfono';
@@ -207,7 +228,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                   ),
                   actions: [
                     TextButton(
-                      child: Text('OK'),
+                      child: const Text('OK'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           final nuevoHotel = {
