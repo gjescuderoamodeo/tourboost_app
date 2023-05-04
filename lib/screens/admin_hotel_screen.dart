@@ -54,14 +54,15 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
   }
 
   //función asincrona crear hotel
-  void crearHotel() async {
+  void crearHotel(int idLugar, int plazasTotales, String direccion,
+      String telefono_contacto, String nombre) async {
     final nuevoHotel = {
-      "idLugar": 2,
-      "plazasTotales": 50,
-      "plazasDisponibles": 25,
-      "direccion": "Calle 123, Ciudad",
-      "telefono_contacto": "1234567890",
-      "nombre": "Hotel Ejemplo"
+      "idLugar": idLugar,
+      "plazasTotales": plazasTotales,
+      "plazasDisponibles": plazasTotales,
+      "direccion": direccion,
+      "telefono_contacto": telefono_contacto,
+      "nombre": nombre
     };
 
     final response = await http.post(
@@ -230,6 +231,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                     TextButton(
                       child: const Text('OK'),
                       onPressed: () {
+                        print("to tus muertos");
                         if (_formKey.currentState!.validate()) {
                           final nuevoHotel = {
                             'id': 23,
@@ -241,6 +243,12 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                           setState(() {
                             //print(nuevoHotel);
                             //data.add(nuevoHotel);
+                            crearHotel(
+                                2,
+                                int.parse(_plazasController.text),
+                                _direccionController.text,
+                                _telefonoController.text,
+                                _nombreController.text);
                           });
                         }
                       },
