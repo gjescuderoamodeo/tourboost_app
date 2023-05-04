@@ -231,7 +231,6 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                     TextButton(
                       child: const Text('OK'),
                       onPressed: () {
-                        print("to tus muertos");
                         if (_formKey.currentState!.validate()) {
                           final nuevoHotel = {
                             'id': 23,

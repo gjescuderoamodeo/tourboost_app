@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:ffi';
+import '../models/models.dart';
 
 class AdminPaisScreen extends StatefulWidget {
   const AdminPaisScreen({super.key});
@@ -17,27 +23,69 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
+  final _codigoController = TextEditingController();
 
-  final List<Map<String, dynamic>> data = [
-    {
-      "id": "1",
-      "nombre": "zz",
-    },
-    {
-      "id": "2",
-      "nombre": "gg",
+  //obtener paises api
+  List<Pais> paises = [];
+
+  Future<void> _getPais() async {
+    final response =
+        await http.get(Uri.parse('https://tour-boost-api.vercel.app/pais'));
+
+    //print(response.body);
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      paises = parsed.map<Pais>((json) => Pais.fromJson(json)).toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load Pais');
     }
-  ];
+  }
+
+  //función asincrona crear pais
+  void crearPais(String nombre, String codigopais) async {
+    final nuevoPais = {"nombre": nombre, "codigo_pais": codigopais};
+
+    final response = await http.post(
+      Uri.parse('https://tour-boost-api.vercel.app/pais'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(nuevoPais),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Pais creado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al crear el Pais",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
+  @override
+  void initState() {
+    super.initState();
+    _getPais();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Pais> paises = data.map((paisData) {
-      return Pais(
-        id: paisData['id'],
-        name: paisData['nombre'],
-      );
-    }).toList();
-
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -118,10 +166,25 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
                       children: [
                         TextFormField(
                           controller: _nombreController,
-                          decoration: InputDecoration(labelText: 'Nombre'),
+                          decoration:
+                              const InputDecoration(labelText: 'Nombre'),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Por favor, ingrese el nombre';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          controller: _codigoController,
+                          decoration:
+                              const InputDecoration(labelText: 'Codigo pais'),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Por favor, ingrese el codigo';
                             }
                             return null;
                           },
@@ -131,16 +194,14 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
                   ),
                   actions: [
                     TextButton(
-                      child: Text('OK'),
+                      child: const Text('OK'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          final nuevoPais = {
-                            'id': '23',
-                            'nombre': _nombreController.text,
-                          };
                           setState(() {
                             //print(nuevoPais);
-                            data.add(nuevoPais);
+                            //data.add(nuevoPais);
+                            crearPais(
+                                _nombreController.text, _codigoController.text);
                           });
                         }
                       },
@@ -168,7 +229,7 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
               setState(() {
-                data.removeAt(rowIndex);
+                //data.removeAt(rowIndex);
               });
             },
             child: Container(
@@ -186,7 +247,7 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
             onTap: () {
               //Navigator.pushNamed(
               //    context, 'card'); // <----navegar a la página 'alert'
-              print(data[rowIndex]['id']);
+              //print(data[rowIndex]['id']);
             },
             child: Container(
               color: const Color.fromARGB(255, 134, 139, 133),
@@ -198,23 +259,23 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
         },
         columns: <GridColumn>[
           GridColumn(
-            columnName: 'id',
-            label: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              alignment: Alignment.centerLeft,
-              child: const Text(
-                'Id',
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ),
-          GridColumn(
             columnName: 'nombre',
             label: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               alignment: Alignment.centerLeft,
               child: const Text(
-                'Nombre',
+                'Nombre pais',
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ),
+          GridColumn(
+            columnName: 'codigo_pais',
+            label: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              alignment: Alignment.centerLeft,
+              child: const Text(
+                'Código pais',
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -228,27 +289,17 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
   }
 }
 
-class Pais {
-  const Pais({
-    required this.id,
-    required this.name,
-  });
-
-  final String id;
-  final String name;
-}
-
 class PaisDataSource extends DataGridSource {
   PaisDataSource({required List<Pais> paises}) {
     dataGridRows = paises
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
               DataGridCell<String>(
-                columnName: 'id',
-                value: dataGridRow.id,
+                columnName: 'nombre',
+                value: dataGridRow.nombre,
               ),
               DataGridCell<String>(
-                columnName: 'nombre',
-                value: dataGridRow.name,
+                columnName: 'codigo_pais',
+                value: dataGridRow.codigo_pais,
               ),
             ]))
         .toList();
