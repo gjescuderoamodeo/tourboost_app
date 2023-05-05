@@ -65,9 +65,51 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
           backgroundColor: const Color.fromARGB(255, 168, 239, 4),
           textColor: Colors.white,
           fontSize: 16.0);
+          _getPais();
     } else {
       Fluttertoast.showToast(
           msg: "Error al crear el Pais",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
+  //función asincrona borrar hotel
+  void _borrarPais(int rowIndex) async {
+    //nombre del hotel en función de la posición del array
+    String nombre = paises[rowIndex].nombre;
+
+    final body = {
+      'nombre': nombre,
+    };
+
+    final response = await http.delete(
+      Uri.parse('https://tour-boost-api.vercel.app/pais'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(body),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Pais borrado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _getPais(); //recargo la vista
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al borrar el Pais",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
@@ -203,6 +245,9 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
                             crearPais(
                                 _nombreController.text, _codigoController.text);
                           });
+
+                          //quitar el alert dialog
+                          Navigator.pop(context);
                         }
                       },
                     ),
@@ -228,6 +273,7 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
             onTap: () {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
+              _borrarPais(rowIndex);
               setState(() {
                 //data.removeAt(rowIndex);
               });
