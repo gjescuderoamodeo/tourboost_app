@@ -29,7 +29,7 @@ class _MapScreenState extends State<MapScreen> {
 
     //print(response.body);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) {      
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       lugares = parsed.map<Lugar>((json) => Lugar.fromJson(json)).toList();
       setState(() {});
@@ -49,7 +49,7 @@ class _MapScreenState extends State<MapScreen> {
     super.initState();
     _requestLocationPermission();
     //lugares
-    //_getLugares();
+    _getLugares();
     _loadLugares();
   }
 
@@ -68,6 +68,9 @@ class _MapScreenState extends State<MapScreen> {
 
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
+
+    print("pepe");
+    print(lugares);
 
     //marcadores a añadir
     for (int i = 0; i < lugares.length; i++) {
