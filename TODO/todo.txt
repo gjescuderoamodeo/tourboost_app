@@ -1,5 +1,3 @@
 añadir lista desplegable el crear nuevo hotel que permita decidir el lugar
 
-hacer que los hoteles sean los nombres únicos
-
 https://github.com/prisma/prisma/discussions/10040
