@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
 
@@ -48,13 +49,12 @@ class _HotelScreenState extends State<HotelScreen> {
     SampleItem? selectedMenu;
 
     //datos pasados de hoteles screen
-    final datos =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final datos = ModalRoute.of(context)!.settings.arguments as Hotel;
 
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
-        title: Text(datos["nombre"]),
+        title: Text(datos.nombre),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 5),
