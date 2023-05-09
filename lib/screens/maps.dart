@@ -29,7 +29,7 @@ class _MapScreenState extends State<MapScreen> {
 
     //print(response.body);
 
-    if (response.statusCode == 200) {      
+    if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
       lugares = parsed.map<Lugar>((json) => Lugar.fromJson(json)).toList();
       setState(() {});
@@ -61,7 +61,7 @@ class _MapScreenState extends State<MapScreen> {
           MarkerId(lugares[i].idLugar.toString()),
           LatLng(lugares[i].latitud, lugares[i].longitud),
           lugares[i].tipoLugar,
-          lugares[i].nombrePais,
+          lugares[i].nombre,
           lugares[i].nombrePais);
     }
   }
