@@ -1,3 +1,7 @@
 añadir lista desplegable el crear nuevo hotel que permita decidir el lugar
 
 https://github.com/prisma/prisma/discussions/10040
+
+termianr resrvar hotel
+
+que la página de hoteles sea pais-hoteles de dicho pais
