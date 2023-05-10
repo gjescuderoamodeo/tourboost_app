@@ -47,13 +47,15 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
   Widget build(BuildContext context) {
     //datos pasados de recomendaciones_lugar screen
     String datos = ModalRoute.of(context)!.settings.arguments.toString();
-    print(datos);
     _getRecomendacion(datos);
 
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
-        title: const Text("Recomendación"),
+        title: Text(
+          "Recomendaciones de $datos",
+          style: const TextStyle(fontSize: 15),
+        ),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 5),
