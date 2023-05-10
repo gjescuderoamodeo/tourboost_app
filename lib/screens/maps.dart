@@ -203,7 +203,7 @@ class _MapScreenState extends State<MapScreen> {
             onTap: () {
               //print(ontap);
               //print(ontap);
-              Navigator.pushNamed(context, 'recomendacion', arguments: ontap);
+              Navigator.pushNamed(context, 'recomendacion', arguments: snippet);
             },
             //
           ),
