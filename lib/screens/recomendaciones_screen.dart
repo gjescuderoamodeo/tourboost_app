@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/services/services.dart';
 import '../widgets/widgets.dart';
 import 'screens.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RecomendacionScreen extends StatefulWidget {
   RecomendacionScreen({Key? key}) : super(key: key);
@@ -14,15 +17,43 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
   //variable menú desplegable
   SampleItem4? selectedMenu;
 
+  //obtener recomendaciones_lugar api
+  List<Recomendacion> recomendaciones_lugar = [];
+
+  Future<void> _getRecomendacion(String nombre) async {
+    final response = await http.post(
+        Uri.parse('https://tour-boost-api.vercel.app/lugarrecomendacion'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'nombre': nombre}));
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      recomendaciones_lugar = parsed
+          .map<Recomendacion>((json) => Recomendacion.fromJson(json))
+          .toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load recomendaciones_lugar');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    //_getRecomendacion();
+  }
+
   @override
   Widget build(BuildContext context) {
-    //datos pasados de hoteles screen
+    //datos pasados de recomendaciones_lugar screen
     String datos = ModalRoute.of(context)!.settings.arguments.toString();
+    print(datos);
+    _getRecomendacion(datos);
 
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
-        title: const Text("Recomendación "),
+        title: const Text("Recomendación"),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 5),
@@ -82,16 +113,18 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         children: [
-          CustomCardType(
-            imageUrl:
-                "https://th.bing.com/th/id/OIP.YwUr61ty6Ne_Ijl-Kn-9sQHaFH?pid=ImgDet&rs=1",
-            mensaje: datos,
-          ),
-          CustomCardType(
-            imageUrl:
-                "https://3.bp.blogspot.com/-3xHYPis5oL4/V5x6LFTm4hI/AAAAAAAAEzI/0MgJwBVeew457ImK31YPg_-EAnCdmfYUQCLcB/s1600/Arma%2B3%2Bss1.jpg",
-            mensaje: 'Arma III',
-          )
+          ...recomendaciones_lugar.asMap().entries.map((entry) {
+            //final index = entry.key;
+            final recomendacion = entry.value;
+            return Column(
+              children: [
+                CustomCardType(
+                  imageUrl: recomendacion.imagen,
+                  mensaje: recomendacion.descripcion,
+                ),
+              ],
+            );
+          }).toList(),
         ],
       ),
     );
