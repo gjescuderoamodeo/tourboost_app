@@ -69,9 +69,6 @@ class _MapScreenState extends State<MapScreen> {
   void _onMapCreated(GoogleMapController controller) {
     _controller = controller;
 
-    print("pepe");
-    print(lugares);
-
     //marcadores a añadir
     for (int i = 0; i < lugares.length; i++) {
       addMarker(
@@ -202,12 +199,14 @@ class _MapScreenState extends State<MapScreen> {
           infoWindow: InfoWindow(
             title: title,
             snippet: snippet,
+            //al pulsar un marcador
+            onTap: () {
+              //print(ontap);
+              //print(ontap);
+              Navigator.pushNamed(context, 'recomendacion', arguments: ontap);
+            },
+            //
           ),
-          //al pulsar un marcador
-          onTap: () {
-            print(ontap);
-          },
-          //
         ),
       );
     });

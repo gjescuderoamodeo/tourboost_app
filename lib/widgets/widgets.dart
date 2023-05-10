@@ -7,3 +7,4 @@ export 'package:tourboost_app/widgets/card_table2.dart';
 export 'package:tourboost_app/widgets/auth_background.dart';
 export 'package:tourboost_app/widgets/card_container.dart';
 export 'package:tourboost_app/widgets/custom_input_field.dart';
+export 'package:tourboost_app/widgets/custom_cart_type.dart';

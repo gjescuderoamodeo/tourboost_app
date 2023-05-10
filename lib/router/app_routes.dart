@@ -73,6 +73,11 @@ class AppRoutes {
         name: 'hotel Screen',
         screen: HotelScreen(),
         icon: Icons.holiday_village_rounded),
+    MenuOption(
+        route: 'recomendacion',
+        name: 'recomendacion Screen',
+        screen: RecomendacionScreen(),
+        icon: Icons.read_more),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {
