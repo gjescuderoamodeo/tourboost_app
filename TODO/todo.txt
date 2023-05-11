@@ -5,3 +5,5 @@ termianr resrvar hotel
 que la página de hoteles sea pais-hoteles de dicho pais
 
 añadir un como llegar en recomendaciones
+
+añadir ver en el mapa página hotel
