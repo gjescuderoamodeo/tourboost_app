@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:ffi';
 
 class ReservasScreen extends StatefulWidget {
   const ReservasScreen({super.key});
@@ -15,27 +19,60 @@ class _ReservasScreenState extends State<ReservasScreen> {
   //variable menú desplegable
   SampleItem? selectedMenu;
 
+  //obtener reservas api
+  List<Reserva> reserva = [];
+
+  Future<void> _getReserva() async {
+    final response = await http
+        .get(Uri.parse('https://tour-boost-api.vercel.app/reserva/1'));
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      reserva = parsed.map<Reserva>((json) => Reserva.fromJson(json)).toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load Reservas');
+    }
+  }
+
+  //
+
+  //obtener hotel seleccionado
+  late Hotel hotel;
+
+  Future<void> _getHotel(int idHotel) async {
+    final response = await http
+        .get(Uri.parse('https://tour-boost-api.vercel.app/hotel/$idHotel'));
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body);
+      hotel = Hotel.fromJson(parsed);
+      setState(() {});
+    } else {
+      throw Exception('Failed to load Hotel');
+    }
+  }
+
+  //
+
+  @override
+  void initState() {
+    super.initState();
+    _getReserva();
+  }
+
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
 
-  final List<Map<String, dynamic>> data = [
-    {
-      "fecha Inicio": "22-22-22",
-      "fecha fin": "33-33-33",
-    },
-    {
-      "fecha Inicio": "2",
-      "fecha fin": "gg",
-    }
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final List<Reserva> reservaes = data.map((reservaData) {
+    final List<Reserva> reservas = reserva.map((reservaData) {
       return Reserva(
-        fechaInicio: reservaData['fecha Inicio'],
-        fechaFin: reservaData['fecha fin'],
-      );
+          fecha_inicio: reservaData.fecha_inicio,
+          fecha_fin: reservaData.fecha_fin,
+          idReserva: reservaData.idReserva,
+          idHotel: reservaData.idHotel,
+          idUsuario: reservaData.idUsuario);
     }).toList();
 
     return Scaffold(
@@ -109,7 +146,7 @@ class _ReservasScreenState extends State<ReservasScreen> {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
               setState(() {
-                data.removeAt(rowIndex);
+                //data.removeAt(rowIndex);
               });
             },
             child: Container(
@@ -124,16 +161,15 @@ class _ReservasScreenState extends State<ReservasScreen> {
         startSwipeActionsBuilder:
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(
-                  context, 'map'); // <----navegar a la página 'map'
-              print(data[rowIndex]['fecha Inicio']);
+            onTap: () async {
+              await _getHotel(reserva[rowIndex].idHotel);
+              Navigator.pushNamed(context, 'hotel', arguments: hotel);
             },
             child: Container(
-              color: Color.fromARGB(255, 36, 177, 7),
+              color: Color.fromARGB(255, 125, 94, 223),
               child: const Center(
                 child: Icon(
-                  Icons.map_rounded,
+                  Icons.hotel,
                   size: 29,
                 ),
               ),
@@ -165,34 +201,24 @@ class _ReservasScreenState extends State<ReservasScreen> {
           ),
         ],
         source: ReservaDataSource(
-          reservaes: reservaes,
+          reservas: reservas,
         ),
       ),
     );
   }
 }
 
-class Reserva {
-  const Reserva({
-    required this.fechaInicio,
-    required this.fechaFin,
-  });
-
-  final String fechaInicio;
-  final String fechaFin;
-}
-
 class ReservaDataSource extends DataGridSource {
-  ReservaDataSource({required List<Reserva> reservaes}) {
-    dataGridRows = reservaes
+  ReservaDataSource({required List<Reserva> reservas}) {
+    dataGridRows = reservas
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
               DataGridCell<String>(
                 columnName: 'fecha incio',
-                value: dataGridRow.fechaInicio,
+                value: dataGridRow.fecha_inicio.split('T')[0],
               ),
               DataGridCell<String>(
                 columnName: 'fecha fin',
-                value: dataGridRow.fechaFin,
+                value: dataGridRow.fecha_fin.split('T')[0],
               ),
             ]))
         .toList();
