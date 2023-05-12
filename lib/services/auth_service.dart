@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class AuthService extends ChangeNotifier {
   final url = Uri.parse('https://tour-boost-api.vercel.app/login');
@@ -49,7 +50,7 @@ class AuthService extends ChangeNotifier {
     );
     if (resp.statusCode == 200) {
       final Map<String, dynamic> decodedResp = json.decode(resp.body);
-      print(decodedResp);
+      //print(decodedResp);
 
       if (decodedResp.containsKey('token')) {
         // Token hay que guardarlo en un lugar seguro
@@ -86,5 +87,10 @@ class AuthService extends ChangeNotifier {
 
   Future<String> readToken() async {
     return await storage.read(key: 'token') ?? '';
+  }
+
+  int getUserIdFromToken(String token) {
+    final jwt = JWT.decode(token);
+    return jwt.payload["userId"];
   }
 }

@@ -23,8 +23,14 @@ class _ReservasScreenState extends State<ReservasScreen> {
   List<Reserva> reserva = [];
 
   Future<void> _getReserva() async {
+    final AuthService authService = AuthService();
+
+    //obtener token
+    final token = await authService.readToken();
+    final userId = authService.getUserIdFromToken(token);
+
     final response = await http
-        .get(Uri.parse('https://tour-boost-api.vercel.app/reserva/1'));
+        .get(Uri.parse('https://tour-boost-api.vercel.app/reserva/$userId'));
 
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
