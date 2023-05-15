@@ -51,6 +51,8 @@ dependencies:
   permission_handler: ^10.2.0
   google_fonts: ^4.0.3
 
+  url_launcher: ^6.1.11
+
   syncfusion_flutter_datagrid: ^21.1.38
 
 dev_dependencies:

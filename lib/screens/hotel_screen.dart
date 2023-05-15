@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
@@ -211,8 +212,14 @@ class _HotelScreenState extends State<HotelScreen> {
               style: TextStyle(fontSize: 20),
             ),
             trailing: const Icon(Icons.map),
-            onTap: () {
-              //mapa screen
+            onTap: () async {
+              final url =
+                  'https://www.google.com/maps/search/?api=1&query=Madrid';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'No se pudo abrir el mapa.';
+              }
             },
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
