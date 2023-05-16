@@ -21,7 +21,7 @@ class CardTable extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, 'hoteles');
+              Navigator.pushNamed(context, 'paises');
             },
             child: const _SigleCard(
               color: Colors.pinkAccent,

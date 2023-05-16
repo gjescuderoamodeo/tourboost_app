@@ -78,6 +78,11 @@ class AppRoutes {
         name: 'recomendacion Screen',
         screen: RecomendacionScreen(),
         icon: Icons.read_more),
+    MenuOption(
+        route: 'paises',
+        name: 'paises Screen',
+        screen: PaisesScreen(),
+        icon: Icons.countertops),
   ];
 
   static Map<String, Widget Function(BuildContext)> getAppRoutes() {

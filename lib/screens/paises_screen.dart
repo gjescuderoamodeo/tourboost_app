@@ -8,52 +8,47 @@ import '../models/models.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class HotelesScreen extends StatefulWidget {
-  const HotelesScreen({super.key});
+class PaisesScreen extends StatefulWidget {
+  const PaisesScreen({super.key});
 
   @override
-  State<HotelesScreen> createState() => _HotelesScreenState();
+  State<PaisesScreen> createState() => _PaisesScreenState();
 }
 
-class _HotelesScreenState extends State<HotelesScreen> {
+class _PaisesScreenState extends State<PaisesScreen> {
   //variable menú desplegable
   SampleItem? selectedMenu;
 
-  //obtener hoteles api
-  List<Hotel> hoteles = [];
+  //obtener paises api
+  List<Pais> paises = [];
 
-  Future<void> _getHoteles(String pais) async {
+  Future<void> _getPaises() async {
     final response =
-        await http.get(Uri.parse('https://tour-boost-api.vercel.app/hotelpais/$pais'));
+        await http.get(Uri.parse('https://tour-boost-api.vercel.app/pais'));
 
     //print(response.body);
 
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-      hoteles = parsed.map<Hotel>((json) => Hotel.fromJson(json)).toList();
+      paises = parsed.map<Pais>((json) => Pais.fromJson(json)).toList();
       setState(() {});
     } else {
-      throw Exception('Failed to load hoteles');
+      throw Exception('Failed to load paises');
     }
-  }/*
+  }
 
   @override
   void initState() {
     super.initState();
-    _getHoteles();
-  }*/
+    _getPaises();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    //datos pasados de paises screen
-    final nombrePais = ModalRoute.of(context)!.settings.arguments as String;
-    _getHoteles(nombrePais);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
-        title: const Text("Hoteles disponibles"),
+        title: const Text("Paises disponibles"),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 5),
@@ -112,10 +107,11 @@ class _HotelesScreenState extends State<HotelesScreen> {
       ),
       body: ListView(
         children: [
-          ...hoteles
+          ...paises
               .map((e) => ListTile(
                   onTap: () {
-                    Navigator.pushNamed(context, 'hotel', arguments: e);
+                    //le paso el nombre del pais y en hoteles hará consulta a "/hotelpais/nombrepais"
+                    Navigator.pushNamed(context, 'hoteles', arguments: e);
                   },
                   title: Text(e.nombre),
                   trailing: const Icon(Icons.arrow_forward_ios_sharp)))
