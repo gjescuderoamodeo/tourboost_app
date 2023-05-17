@@ -2,6 +2,8 @@ añadir lista desplegable el crear nuevo hotel que permita decidir el lugar
 
 termianr resrvar hotel
 
+añadir a reserva nº personas reserva
+
 añadir un como llegar en recomendaciones
 
 añadir ver en el mapa página hotel
