@@ -23,8 +23,8 @@ class _HotelesScreenState extends State<HotelesScreen> {
   List<Hotel> hoteles = [];
 
   Future<void> _getHoteles(String pais) async {
-    final response =
-        await http.get(Uri.parse('https://tour-boost-api.vercel.app/hotelpais/$pais'));
+    final response = await http
+        .get(Uri.parse('https://tour-boost-api.vercel.app/hotelpais/$pais'));
 
     //print(response.body);
 
@@ -35,7 +35,7 @@ class _HotelesScreenState extends State<HotelesScreen> {
     } else {
       throw Exception('Failed to load hoteles');
     }
-  }/*
+  } /*
 
   @override
   void initState() {
@@ -45,7 +45,6 @@ class _HotelesScreenState extends State<HotelesScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     //datos pasados de paises screen
     final nombrePais = ModalRoute.of(context)!.settings.arguments as String;
     _getHoteles(nombrePais);

@@ -111,7 +111,8 @@ class _PaisesScreenState extends State<PaisesScreen> {
               .map((e) => ListTile(
                   onTap: () {
                     //le paso el nombre del pais y en hoteles hará consulta a "/hotelpais/nombrepais"
-                    Navigator.pushNamed(context, 'hoteles', arguments: e);
+                    Navigator.pushNamed(context, 'hoteles',
+                        arguments: e.nombre);
                   },
                   title: Text(e.nombre),
                   trailing: const Icon(Icons.arrow_forward_ios_sharp)))
