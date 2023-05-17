@@ -2,6 +2,8 @@ añadir lista desplegable el crear nuevo hotel que permita decidir el lugar
 
 termianr resrvar hotel
 
+cuando llegue la reserva a la fecha final, que se elimine
+
 añadir a reserva nº personas reserva
 
 añadir un como llegar en recomendaciones
