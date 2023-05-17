@@ -54,6 +54,7 @@ class _HotelScreenState extends State<HotelScreen> {
 
     //datos pasados de hoteles screen
     final datos = ModalRoute.of(context)!.settings.arguments as Hotel;
+    String dirrecionHotel = datos.direccion;
 
     return Scaffold(
       appBar: AppBar(
@@ -214,7 +215,7 @@ class _HotelScreenState extends State<HotelScreen> {
             trailing: const Icon(Icons.map),
             onTap: () async {
               final url =
-                  'https://www.google.com/maps/search/?api=1&query=Madrid';
+                  'https://www.google.com/maps/search/?api=1&query=$dirrecionHotel';
               if (await canLaunch(url)) {
                 await launch(url);
               } else {
