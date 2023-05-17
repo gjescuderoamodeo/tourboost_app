@@ -4,6 +4,8 @@ import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -47,6 +49,67 @@ class _HotelScreenState extends State<HotelScreen> {
   }
 //
 
+  //función obtener id usuario
+  Future<void> _getUserId() async {
+    final AuthService authService = AuthService();
+
+    //obtener token
+    final token = await authService.readToken();
+    final userId = authService.getUserIdFromToken(token);
+
+    _idUser = userId;
+  }
+
+  //función asincrona crear reserva
+  void _crearReserva(int idUsuario, int numeroReservantes, int idHotel,
+      String fecha_inicio, String fecha_fin) async {
+    final nuevaReserva = {
+      "idUsuario": idUsuario,
+      "fecha_inicio": fecha_inicio,
+      "fecha_fin": fecha_fin,
+      "idHotel": idHotel,
+      "numeroReservantes": numeroReservantes,
+    };
+
+    final response = await http.post(
+      Uri.parse('https://tour-boost-api.vercel.app/reserva'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(nuevaReserva),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Reserva creada",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al crear la Reserva",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
+  late int _idUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserId();
+  }
+
   @override
   Widget build(BuildContext context) {
     //variable menú desplegable
@@ -55,6 +118,7 @@ class _HotelScreenState extends State<HotelScreen> {
     //datos pasados de hoteles screen
     final datos = ModalRoute.of(context)!.settings.arguments as Hotel;
     String dirrecionHotel = datos.direccion;
+    int idHotel = datos.idHotel;
 
     return Scaffold(
       appBar: AppBar(
@@ -194,6 +258,14 @@ class _HotelScreenState extends State<HotelScreen> {
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else {
+                            //creo la reseva
+                            _crearReserva(
+                                _idUser,
+                                numeroReserva,
+                                idHotel,
+                                _selectedRange!.start.toString(),
+                                _selectedRange!.end.toString());
+
                             Navigator.of(context).pop();
                           }
                         },
