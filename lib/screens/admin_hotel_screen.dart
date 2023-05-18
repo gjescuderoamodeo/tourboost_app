@@ -2,7 +2,8 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:tourboost_app/screens/screens.dart';
+import 'package:tourboost_app/models/models.dart';
+import 'package:tourboost_app/screens/home_screen.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
 
@@ -10,7 +11,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../models/models.dart';
 
 class AdminHotelScreen extends StatefulWidget {
   const AdminHotelScreen({super.key});
@@ -25,6 +25,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
+  final _idLugarController = TextEditingController();
   final _direccionController = TextEditingController();
   final _plazasController = TextEditingController();
   final _telefonoController = TextEditingController();
@@ -47,10 +48,29 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
     }
   }
 
+  //obtener lugares api
+  List<Lugar> lugares = [];
+
+  Future<void> _getLugares() async {
+    final response =
+        await http.get(Uri.parse('https://tour-boost-api.vercel.app/lugar'));
+
+    //print(response.body);
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      lugares = parsed.map<Lugar>((json) => Lugar.fromJson(json)).toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load lugares');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _getHoteles();
+    _getLugares();
   }
 
   //función asincrona crear hotel
@@ -266,6 +286,30 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                             return null;
                           },
                         ),
+                        const SizedBox(height: 15),
+                        DropdownButtonFormField<String>(
+                          value: _idLugarController.text.isNotEmpty
+                              ? _idLugarController.text
+                              : null,
+                          items: lugares.map<DropdownMenuItem<String>>((lugar) {
+                            return DropdownMenuItem<String>(
+                              value: lugar.idLugar.toString(),
+                              child: Text(lugar.nombre),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _idLugarController.text = value ?? '';
+                            });
+                          },
+                          decoration: const InputDecoration(labelText: 'Lugar'),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Por favor, seleccione un lugar';
+                            }
+                            return null;
+                          },
+                        )
                       ],
                     ),
                   ),
@@ -274,18 +318,18 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                       child: const Text('OK'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          final nuevoHotel = {
+                          /*final nuevoHotel = {
                             'id': 23,
                             'nombre': _nombreController.text,
                             'direccion': _direccionController.text,
                             'plazas': int.parse(_plazasController.text),
                             'telefono': _telefonoController.text,
-                          };
+                          };*/
                           setState(() {
                             //print(nuevoHotel);
                             //data.add(nuevoHotel);
                             _crearHotel(
-                                2,
+                                int.parse(_idLugarController.text),
                                 int.parse(_plazasController.text),
                                 _direccionController.text,
                                 _telefonoController.text,
