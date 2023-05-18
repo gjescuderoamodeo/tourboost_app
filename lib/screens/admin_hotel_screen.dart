@@ -117,6 +117,51 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
   }
   //
 
+  //función asincrona modificar hotel
+  void _modificarHotel(int idLugar, int idHotel, int plazasTotales,
+      String direccion, String telefono_contacto, String nombre) async {
+    final nuevoHotel = {
+      "idLugar": idLugar,
+      "idHotel": idHotel,
+      "plazasTotales": plazasTotales,
+      "plazasDisponibles": plazasTotales,
+      "direccion": direccion,
+      "telefono_contacto": telefono_contacto,
+      "nombre": nombre
+    };
+
+    final response = await http.put(
+      Uri.parse('https://tour-boost-api.vercel.app/hotel'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(nuevoHotel),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Hotel modificado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _getHoteles(); //recargo la vista
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al modificar el Hotel",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
   //función asincrona borrar hotel
   void _borrarHotel(int rowIndex) async {
     //nombre del hotel en función de la posición del array
@@ -369,9 +414,9 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
               });
             },
             child: Container(
-              color: Colors.redAccent, // <---- cambia el color a rojo
+              color: Colors.redAccent,
               child: const Center(
-                child: Icon(Icons.delete), // <---- cambia el icono a borrar
+                child: Icon(Icons.delete),
               ),
             ),
           );
@@ -381,9 +426,131 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
             onTap: () {
-              //Navigator.pushNamed(
-              //    context, 'card'); // <----navegar a la página 'alert'
               //print(data[rowIndex]['id']);
+              _nombreController.text = hoteles[rowIndex].nombre;
+              _direccionController.text = hoteles[rowIndex].direccion;
+              _plazasController.text =
+                  hoteles[rowIndex].plazasTotales.toString();
+              _direccionController.text = hoteles[rowIndex].direccion;
+              _telefonoController.text = hoteles[rowIndex].telefono_contacto;
+
+              //caja de texto para modificar el hotel
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('modificar hotel'),
+                    content: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _nombreController,
+                            decoration:
+                                const InputDecoration(labelText: 'Nombre'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _direccionController,
+                            decoration:
+                                const InputDecoration(labelText: 'Dirección'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese la dirección';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _plazasController,
+                            decoration:
+                                const InputDecoration(labelText: 'Plazas'),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el número de plazas';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _telefonoController,
+                            decoration:
+                                const InputDecoration(labelText: 'Teléfono'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el teléfono';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          DropdownButtonFormField<String>(
+                            value: _idLugarController.text.isNotEmpty
+                                ? _idLugarController.text
+                                : null,
+                            items:
+                                lugares.map<DropdownMenuItem<String>>((lugar) {
+                              return DropdownMenuItem<String>(
+                                value: lugar.idLugar.toString(),
+                                child: Text(lugar.nombre),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _idLugarController.text = value ?? '';
+                              });
+                            },
+                            decoration:
+                                const InputDecoration(labelText: 'Lugar'),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, seleccione un lugar';
+                              }
+                              return null;
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: const Center(
+                          child: Text(
+                            'Modificar',
+                            style: TextStyle(color: Colors.red, fontSize: 15),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              _modificarHotel(
+                                  hoteles[rowIndex].idHotel,
+                                  int.parse(_idLugarController.text),
+                                  int.parse(_plazasController.text),
+                                  _direccionController.text,
+                                  _telefonoController.text,
+                                  _nombreController.text);
+
+                              //quitar el alert dialog
+                              Navigator.pop(context);
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             child: Container(
               color: const Color.fromARGB(255, 134, 139, 133),
@@ -393,6 +560,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
             ),
           );
         },
+        //columnas de la tabla
         columns: <GridColumn>[
           GridColumn(
             columnName: 'nombre',
