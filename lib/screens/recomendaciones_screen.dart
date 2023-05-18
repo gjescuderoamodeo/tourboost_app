@@ -123,6 +123,7 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
                 CustomCardType(
                   imageUrl: recomendacion.imagen,
                   mensaje: recomendacion.descripcion,
+                  nombre: recomendacion.nombre,
                 ),
               ],
             );
