@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/services/services.dart';
+import 'package:tourboost_app/theme/app_theme.dart';
 import '../widgets/widgets.dart';
 import 'screens.dart';
 import 'package:http/http.dart' as http;
@@ -25,6 +26,32 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
         Uri.parse('https://tour-boost-api.vercel.app/lugarrecomendacion'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'nombre': nombre}));
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      recomendaciones_lugar = parsed
+          .map<Recomendacion>((json) => Recomendacion.fromJson(json))
+          .toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load recomendaciones_lugar');
+    }
+  }
+
+  //añadir marcador a favoritos
+  Future<void> _addMarcador(String nombre) async {    
+    final AuthService authService = AuthService();
+    //obtener token
+    final token = await authService.readToken();
+    final userId = authService.getUserIdFromToken(token);
+
+    final response = await http
+        .get(Uri.parse('https://tour-boost-api.vercel.app/reserva/$userId'));
+
+    final response = await http.post(
+        Uri.parse('https://tour-boost-api.vercel.app/marcador'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'idUsuario': nombre}));
 
     if (response.statusCode == 200) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -112,22 +139,52 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
           )
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      body: Column(
         children: [
-          ...recomendaciones_lugar.asMap().entries.map((entry) {
-            //final index = entry.key;
-            final recomendacion = entry.value;
-            return Column(
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               children: [
-                CustomCardType(
-                  imageUrl: recomendacion.imagen,
-                  mensaje: recomendacion.descripcion,
-                  nombre: recomendacion.nombre,
-                ),
+                ...recomendaciones_lugar.asMap().entries.map((entry) {
+                  //final index = entry.key;
+                  final recomendacion = entry.value;
+                  return Column(
+                    children: [
+                      CustomCardType(
+                        imageUrl: recomendacion.imagen,
+                        mensaje: recomendacion.descripcion,
+                        nombre: recomendacion.nombre,
+                      ),
+                    ],
+                  );
+                }).toList(),
               ],
-            );
-          }).toList(),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {},
+            child: Material(
+              color: const Color.fromARGB(255, 179, 59, 175),
+              child: InkWell(
+                onTap: () {},
+                splashColor: const Color.fromARGB(255, 17, 236, 2),
+                child: Container(
+                  height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          'Añadir a favoritos',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        ),
+                        Icon(Icons.star,color: Colors.amber,)
+                      ],
+                    ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
