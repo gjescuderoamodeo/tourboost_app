@@ -201,12 +201,11 @@ class _MapScreenState extends State<MapScreen> {
             snippet: snippet,
             //al pulsar un marcador
             onTap: () {
-              //print(ontap);
-              //print(ontap);
               Navigator.pushNamed(context, 'recomendacion', arguments: snippet);
             },
             //
           ),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
         ),
       );
     });
