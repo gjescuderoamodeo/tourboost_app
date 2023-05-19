@@ -5,8 +5,9 @@ import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
 import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
-import 'dart:ffi';
 
 class MarcadoresScreen extends StatefulWidget {
   const MarcadoresScreen({super.key});
@@ -55,6 +56,53 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
       throw Exception('Failed to load marcadores user');
     }
   }
+
+  //función asincrona borrar marcador favorito
+  void _borrarMarcadorF(int rowIndex) async {
+    int idLugar = lugares[rowIndex].idLugar;
+    final AuthService authService = AuthService();
+
+    //obtener token
+    final token = await authService.readToken();
+    final userId = authService.getUserIdFromToken(token);
+
+    final body = {
+      'idLugar': idLugar,
+      'idUsuario':userId
+    };
+
+    final response = await http.delete(
+      Uri.parse('https://tour-boost-api.vercel.app/marcador'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(body),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Marcador favorito borrado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+          lugares.clear();
+      _getMarcadores(); //recargo la vista
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al borrar el marcador",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
 
     @override
   void initState() {
@@ -145,7 +193,7 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
               setState(() {
-                //data.removeAt(rowIndex);
+                _borrarMarcadorF(rowIndex);
               });
             },
             child: Container(
@@ -160,12 +208,18 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
         startSwipeActionsBuilder:
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(
-                  context, 'map'); // <----navegar a la página 'map'              
+            onTap: () async {
+              String lugarRow = lugares[rowIndex].nombre;
+              final url =
+                  'https://www.google.com/maps/search/?api=1&query=$lugarRow';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'No se pudo abrir el mapa.';
+              }
             },
             child: Container(
-              color: Color.fromARGB(255, 36, 177, 7),
+              color: const Color.fromARGB(255, 72, 193, 48),
               child: const Center(
                 child: Icon(
                   Icons.map_rounded,
