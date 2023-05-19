@@ -28,6 +28,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
   final _idLugarController = TextEditingController();
   final _direccionController = TextEditingController();
   final _plazasController = TextEditingController();
+  final _plazas2Controller = TextEditingController();
   final _telefonoController = TextEditingController();
 
   //obtener hoteles api
@@ -118,17 +119,25 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
   //
 
   //función asincrona modificar hotel
-  void _modificarHotel(int idLugar, int idHotel, int plazasTotales,
-      String direccion, String telefono_contacto, String nombre) async {
+  void _modificarHotel(
+      int idLugar,
+      int idHotel,
+      int plazasTotales,
+      int plazasDisponibles,
+      String direccion,
+      String telefono_contacto,
+      String nombre) async {
     final nuevoHotel = {
       "idLugar": idLugar,
       "idHotel": idHotel,
       "plazasTotales": plazasTotales,
-      "plazasDisponibles": plazasTotales,
+      "plazasDisponibles": plazasDisponibles,
       "direccion": direccion,
       "telefono_contacto": telefono_contacto,
       "nombre": nombre
     };
+
+    print(nuevoHotel);
 
     final response = await http.put(
       Uri.parse('https://tour-boost-api.vercel.app/hotel'),
@@ -433,6 +442,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                   hoteles[rowIndex].plazasTotales.toString();
               _direccionController.text = hoteles[rowIndex].direccion;
               _telefonoController.text = hoteles[rowIndex].telefono_contacto;
+              _plazas2Controller.text = hoteles[rowIndex].plazasDisponibles.toString();
 
               //caja de texto para modificar el hotel
               showDialog(
@@ -471,12 +481,25 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                           const SizedBox(height: 15),
                           TextFormField(
                             controller: _plazasController,
-                            decoration:
-                                const InputDecoration(labelText: 'Plazas'),
+                            decoration: const InputDecoration(
+                                labelText: 'Plazas Totales'),
                             keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Por favor, ingrese el número de plazas';
+                                return 'Por favor, ingrese el número de plazas totales';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _plazas2Controller,
+                            decoration: const InputDecoration(
+                                labelText: 'Plazas Disponibles'),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el número de plazas disponibles';
                               }
                               return null;
                             },
@@ -533,10 +556,11 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
-                              _modificarHotel(
-                                  hoteles[rowIndex].idHotel,
+                              _modificarHotel(                                  
                                   int.parse(_idLugarController.text),
+                                  hoteles[rowIndex].idHotel,
                                   int.parse(_plazasController.text),
+                                  int.parse(_plazas2Controller.text),
                                   _direccionController.text,
                                   _telefonoController.text,
                                   _nombreController.text);
@@ -627,7 +651,7 @@ class HotelDataSource extends DataGridSource {
                 columnName: 'direccion',
                 value: dataGridRow.direccion,
               ),
-              DataGridCell<double>(
+              DataGridCell<int>(
                 columnName: 'plazas',
                 value: dataGridRow.plazasTotales,
               ),

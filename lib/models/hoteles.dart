@@ -1,8 +1,8 @@
 class Hotel {
   final int idHotel;  
   final int idLugar;
-  final double plazasTotales;
-  final double plazasDisponibles;
+  final int plazasTotales;
+  final int plazasDisponibles;
   final String direccion;
   final String telefono_contacto;
   final String nombre;
@@ -21,8 +21,8 @@ class Hotel {
     return Hotel(
       idHotel: json['idHotel'],
       idLugar: json['idLugar'],
-      plazasTotales: json['plazasTotales'].toDouble(),
-      plazasDisponibles: json['plazasDisponibles'].toDouble(),
+      plazasTotales: json['plazasTotales'],
+      plazasDisponibles: json['plazasDisponibles'],
       direccion: json['direccion'],
       nombre: json['nombre'],
       telefono_contacto: json['telefono_contacto'],
