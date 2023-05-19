@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/services/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
 import '../widgets/widgets.dart';
 import 'screens.dart';
@@ -39,30 +40,43 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
   }
 
   //añadir marcador a favoritos
-  Future<void> _addMarcador(String nombre) async {    
+  Future<void> _addMarcador() async {    
     final AuthService authService = AuthService();
     //obtener token
     final token = await authService.readToken();
     final userId = authService.getUserIdFromToken(token);
 
-    final response = await http
-        .get(Uri.parse('https://tour-boost-api.vercel.app/reserva/$userId'));
+    //sacar el id del lugar
+    final idLugar = recomendaciones_lugar[0].idLugar;
 
     final response = await http.post(
         Uri.parse('https://tour-boost-api.vercel.app/marcador'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({'idUsuario': nombre}));
+        body: json.encode({'idUsuario': userId,'idLugar':idLugar}));
 
+     //toast de respuesta
     if (response.statusCode == 200) {
-      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-      recomendaciones_lugar = parsed
-          .map<Recomendacion>((json) => Recomendacion.fromJson(json))
-          .toList();
-      setState(() {});
+      Fluttertoast.showToast(
+          msg: "Hotel modificado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      //recargar la vista
     } else {
-      throw Exception('Failed to load recomendaciones_lugar');
+      Fluttertoast.showToast(
+          msg: "Error al modificar el Hotel",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
+  //
 
   @override
   void initState() {
@@ -166,7 +180,9 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
             child: Material(
               color: const Color.fromARGB(255, 179, 59, 175),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  _addMarcador();
+                },
                 splashColor: const Color.fromARGB(255, 17, 236, 2),
                 child: Container(
                   height: 40,
