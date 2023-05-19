@@ -33,7 +33,7 @@ class _HotelScreenState extends State<HotelScreen> {
       context: context,
       saveText: "Elegir fecha",
       helpText: "Elige fecha inicio fin",
-      firstDate: DateTime(2023),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2024),
       initialDateRange: _selectedRange ?? initialDateRange,
     );
