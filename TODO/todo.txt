@@ -4,6 +4,6 @@ cuando llegue la reserva a la fecha final, que se elimine
 
 añadir a reserva nº personas reserva 
 
-añadir ver en el mapa página hotel
-
 -Terminar user update
+
+-añadir estrellita para marcadores favoritos añadir
