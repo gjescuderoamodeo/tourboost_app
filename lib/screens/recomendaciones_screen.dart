@@ -7,6 +7,7 @@ import '../widgets/widgets.dart';
 import 'screens.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:ffi';
 
 class RecomendacionScreen extends StatefulWidget {
   RecomendacionScreen({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
   }
 
   //añadir marcador a favoritos
-  Future<void> _addMarcador() async {    
+  Future<void> _addMarcador() async {
     final AuthService authService = AuthService();
     //obtener token
     final token = await authService.readToken();
@@ -52,12 +53,12 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
     final response = await http.post(
         Uri.parse('https://tour-boost-api.vercel.app/marcador'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({'idUsuario': userId,'idLugar':idLugar}));
+        body: json.encode({'idUsuario': userId, 'idLugar': idLugar}));
 
-     //toast de respuesta
+    //toast de respuesta
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
-          msg: "Hotel modificado correctamente",
+          msg: "Lugar añadido a favoritos",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
@@ -67,7 +68,7 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
       //recargar la vista
     } else {
       Fluttertoast.showToast(
-          msg: "Error al modificar el Hotel",
+          msg: "Error al añadidir a favoritos",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
@@ -180,23 +181,26 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
             child: Material(
               color: const Color.fromARGB(255, 179, 59, 175),
               child: InkWell(
-                onTap: () {
+                onTap: () async {
                   _addMarcador();
                 },
                 splashColor: const Color.fromARGB(255, 17, 236, 2),
                 child: Container(
                   height: 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          'Añadir a favoritos',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        ),
-                        Icon(Icons.star,color: Colors.amber,)
-                      ],
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        'Añadir a favoritos',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
