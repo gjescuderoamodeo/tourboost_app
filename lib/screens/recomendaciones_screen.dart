@@ -66,9 +66,11 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
           textColor: Colors.white,
           fontSize: 16.0);
       //recargar la vista
+      setState(() {});
+      _favorito = true;
     } else {
       Fluttertoast.showToast(
-          msg: "Error al añadidir a favoritos",
+          msg: "Error al añadir a favoritos",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
@@ -79,9 +81,79 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
   }
   //
 
+  //saber si el lugar ya está en favoritos
+  bool _favorito = true;
+
+  Future<void> _deleteMarcador() async {
+    final AuthService authService = AuthService();
+    //obtener token
+    final token = await authService.readToken();
+    final userId = authService.getUserIdFromToken(token);
+
+    //sacar el id del lugar
+    final idLugar = recomendaciones_lugar[0].idLugar;
+
+    final response = await http.delete(
+        Uri.parse('https://tour-boost-api.vercel.app/marcador'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'idUsuario': userId, 'idLugar': idLugar}));
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Lugar quitado de favoritos",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      //recargar la vista
+      setState(() {});
+      _favorito = false;
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al eliminar de favoritos",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //saber si es marcador favorito o no
+  Future<void> _getFavorito() async {
+    final AuthService authService = AuthService();
+    //obtener token
+    final token = await authService.readToken();
+    final userId = authService.getUserIdFromToken(token);
+
+    //sacar el id del lugar
+    final idLugar = recomendaciones_lugar[0].idLugar;
+
+    final response = await http.post(
+        Uri.parse('https://tour-boost-api.vercel.app/marcadoris'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'idUsuario': userId, 'idLugar': idLugar}));
+
+    if (response.statusCode == 202) {
+      _favorito = false;
+      setState(() {});
+    } else if (response.statusCode == 201) {
+      _favorito = true;
+      setState(() {});
+    } else {
+      throw Exception('Failed to load recomendaciones_lugar');
+    }
+  }
+
+  //
   @override
   void initState() {
     super.initState();
+    //_getFavorito();
     //_getRecomendacion();
   }
 
@@ -90,6 +162,12 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
     //datos pasados de recomendaciones_lugar screen
     String datos = ModalRoute.of(context)!.settings.arguments.toString();
     _getRecomendacion(datos);
+
+    Future.delayed(Duration(milliseconds: 200), () {
+      _getFavorito();
+    });
+
+    _getFavorito();
 
     return Scaffold(
       appBar: AppBar(
@@ -179,23 +257,36 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
           GestureDetector(
             onTap: () {},
             child: Material(
-              color: const Color.fromARGB(255, 179, 59, 175),
+              color: _favorito
+                  ? Color.fromARGB(255, 126, 21, 126)
+                  : const Color.fromARGB(255, 179, 59, 175),
               child: InkWell(
                 onTap: () async {
-                  _addMarcador();
+                  if (_favorito) {
+                    _deleteMarcador();
+                  } else {
+                    _addMarcador();
+                  }
                 },
-                splashColor: const Color.fromARGB(255, 17, 236, 2),
+                splashColor: _favorito
+                    ? Color.fromARGB(255, 223, 17, 6)
+                    : const Color.fromARGB(255, 17, 236, 2),
                 child: Container(
                   height: 40,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        'Añadir a favoritos',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.white),
+                        _favorito
+                            ? 'Quitar de favoritos'
+                            : 'Añadir a favoritos',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.star,
                         color: Colors.amber,
                       )
