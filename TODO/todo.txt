@@ -1,9 +1,3 @@
 cuando llegue la reserva a la fecha final, que se elimine
 
--añadir reserva squema, si ha expirado o no
-
-añadir a reserva nº personas reserva 
-
 -Terminar user update
-
--añadir estrellita para marcadores favoritos añadir
