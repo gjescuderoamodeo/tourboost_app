@@ -1,8 +1,16 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:tourboost_app/theme/app_theme.dart';
+
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdminMarcadoresScreen extends StatefulWidget {
   const AdminMarcadoresScreen({super.key});
@@ -22,35 +30,120 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
   final _nombreController = TextEditingController();
   final _paisController = TextEditingController();
 
-  final List<Map<String, dynamic>> data = [
-    {
-      "latitud": "pp",
-      "longitud": "Direccion 1",
-      "tipo_lugar": "playa",
-      "nombre": "rrrr",
-      "pais": "España"
-    },
-    {
-      "latitud": "test",
-      "longitud": "Direccion 2",
-      "tipo_lugar": "bosque",
-      "nombre": "eeee",
-      "pais": "España"
+  //obtener lugares api
+  List<Lugar> lugares = [];
+
+  Future<void> _getLugares() async {
+    final response =
+        await http.get(Uri.parse('https://tour-boost-api.vercel.app/lugar'));
+
+    //print(response.body);
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      lugares = parsed.map<Lugar>((json) => Lugar.fromJson(json)).toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load lugares');
     }
-  ];
+  }
+
+  //función asincrona modificar lugar
+  void _modificar_lugar(
+      int latitud,
+      int longitud,
+      int tipolugar,
+      String nombre,
+      String pais,) async {
+    final nuevoLugar = {
+      "latitud": latitud,
+      "longitud": longitud,
+      "tipolugar": tipolugar,
+      "nombre": nombre,
+      "pais": pais,
+    };
+
+    final response = await http.put(
+      Uri.parse('https://tour-boost-api.vercel.app/lugar'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(nuevoLugar),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Hotel modificado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _getLugares(); //recargo la vista
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al modificar el Hotel",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
+  //función asincrona borrar lugar
+  void _borrarHotel(int rowIndex) async {
+    //nombre del hotel en función de la posición del array
+    int idLugar = lugares[rowIndex].idLugar;
+
+    final body = {
+      'idLugar': idLugar,
+    };
+
+    final response = await http.delete(
+      Uri.parse('https://tour-boost-api.vercel.app/lugar'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(body),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Lugar borrado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _getLugares(); //recargo la vista
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al borrar el Lugar",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
+    @override
+  void initState() {
+    super.initState();
+    _getLugares();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Lugar2> lugares = data.map((lugarData) {
-      return Lugar2(
-        latitud: lugarData['latitud'],
-        longitud: lugarData['longitud'],
-        tipo_lugar: lugarData['tipo_lugar'],
-        nombre: lugarData['nombre'],
-        pais: lugarData['pais'],
-      );
-    }).toList();
-
     return Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -212,7 +305,6 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
                           };
                           setState(() {
                             //print(nuevolugar);
-                            data.add(nuevolugar);
                           });
                         }
                       },
@@ -240,7 +332,6 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
               setState(() {
-                data.removeAt(rowIndex);
               });
             },
             child: Container(
@@ -256,9 +347,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
             onTap: () {
-              //Navigator.pushNamed(
-              //    context, 'card'); // <----navegar a la página 'alert'
-              print(data[rowIndex]['id']);
+              //
             },
             child: Container(
               color: const Color.fromARGB(255, 134, 139, 133),
@@ -333,36 +422,21 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
   }
 }
 
-class Lugar2 {
-  const Lugar2(
-      {required this.latitud,
-      required this.longitud,
-      required this.tipo_lugar,
-      required this.nombre,
-      required this.pais});
-
-  final String latitud;
-  final String longitud;
-  final String tipo_lugar;
-  final String nombre;
-  final String pais;
-}
-
 class lugarDataSource extends DataGridSource {
-  lugarDataSource({required List<Lugar2> lugares}) {
+  lugarDataSource({required List<Lugar> lugares}) {
     dataGridRows = lugares
         .map<DataGridRow>((dataGridRow) => DataGridRow(cells: [
-              DataGridCell<String>(
+              DataGridCell<double>(
                 columnName: 'latitud',
                 value: dataGridRow.latitud,
               ),
-              DataGridCell<String>(
+              DataGridCell<double>(
                 columnName: 'longitud',
                 value: dataGridRow.longitud,
               ),
               DataGridCell<String>(
                 columnName: 'tipo_lugar',
-                value: dataGridRow.tipo_lugar,
+                value: dataGridRow.tipoLugar,
               ),
               DataGridCell<String>(
                 columnName: 'nombre',
@@ -370,7 +444,7 @@ class lugarDataSource extends DataGridSource {
               ),
               DataGridCell<String>(
                 columnName: 'pais',
-                value: dataGridRow.pais,
+                value: dataGridRow.nombrePais,
               ),
             ]))
         .toList();
