@@ -79,6 +79,45 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
   }
   //
 
+  //función asincrona modificar pais
+  void _modificarPais(String codigopais, String nombre) async {
+
+    final nuevoPais = {"nombre": nombre, "codigo_pais": codigopais};
+
+    print(nuevoPais);
+
+    final response = await http.put(
+      Uri.parse('https://tour-boost-api.vercel.app/pais'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(nuevoPais),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Pais modificado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _getPais(); //recargo la vista
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al modificar el Pais",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
   //función asincrona borrar hotel
   void _borrarPais(int rowIndex) async {
     //nombre del hotel en función de la posición del array
@@ -291,9 +330,71 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
             onTap: () {
-              //Navigator.pushNamed(
-              //    context, 'card'); // <----navegar a la página 'alert'
-              //print(data[rowIndex]['id']);
+              _nombreController.text = paises[rowIndex].nombre;
+              _codigoController.text = paises[rowIndex].codigo_pais;
+
+              //caja de texto para modificar el pais
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('modificar pais'),
+                    content: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _nombreController,
+                            decoration:
+                                const InputDecoration(labelText: 'Nombre'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _codigoController,
+                            decoration:
+                                const InputDecoration(labelText: 'Codigo Pais'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el código del pais';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: const Center(
+                          child: Text(
+                            'Modificar',
+                            style: TextStyle(color: Colors.red, fontSize: 15),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              _modificarPais(_nombreController.text, _codigoController.text);
+
+                              //quitar el alert dialog
+                              Navigator.pop(context);
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+
+              
             },
             child: Container(
               color: const Color.fromARGB(255, 134, 139, 133),
