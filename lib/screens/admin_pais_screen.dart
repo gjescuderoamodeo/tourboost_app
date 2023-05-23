@@ -23,6 +23,7 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
 
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
+  String _nombreOriginal = "";
   final _codigoController = TextEditingController();
 
   //obtener paises api
@@ -65,7 +66,7 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
           backgroundColor: const Color.fromARGB(255, 168, 239, 4),
           textColor: Colors.white,
           fontSize: 16.0);
-          _getPais();
+      _getPais();
     } else {
       Fluttertoast.showToast(
           msg: "Error al crear el Pais",
@@ -80,9 +81,13 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
   //
 
   //función asincrona modificar pais
-  void _modificarPais(String codigopais, String nombre) async {
-
-    final nuevoPais = {"nombre": nombre, "codigo_pais": codigopais};
+  void _modificarPais(
+      String codigopais, String nombre_nuevo, String nombre) async {
+    final nuevoPais = {
+      "nombre": nombre,
+      "codigo_pais": codigopais,
+      "nombre_nuevo": nombre_nuevo
+    };
 
     print(nuevoPais);
 
@@ -331,6 +336,7 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
           return GestureDetector(
             onTap: () {
               _nombreController.text = paises[rowIndex].nombre;
+              _nombreOriginal = paises[rowIndex].nombre;
               _codigoController.text = paises[rowIndex].codigo_pais;
 
               //caja de texto para modificar el pais
@@ -381,7 +387,8 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
-                              _modificarPais(_nombreController.text, _codigoController.text);
+                              _modificarPais(_nombreController.text,
+                                  _codigoController.text, _nombreOriginal);
 
                               //quitar el alert dialog
                               Navigator.pop(context);
@@ -393,8 +400,6 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
                   );
                 },
               );
-
-              
             },
             child: Container(
               color: const Color.fromARGB(255, 134, 139, 133),
