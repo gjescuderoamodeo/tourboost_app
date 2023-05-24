@@ -389,8 +389,8 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
-                              _modificarPais(_nombreController.text,
-                                  _codigoController.text, _nombreOriginal);
+                              _modificarPais(_codigoController.text,
+                                  _nombreController.text, _nombreOriginal);
 
                               //quitar el alert dialog
                               Navigator.pop(context);
