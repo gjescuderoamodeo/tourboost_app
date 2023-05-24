@@ -394,7 +394,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
             onTap: () {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
-              setState(() {});
+              _borrarLugar(rowIndex);
             },
             child: Container(
               color: Colors.redAccent, // <---- cambia el color a rojo
