@@ -48,6 +48,24 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
     }
   }
 
+  //obtener paises api
+  List<Pais> paises = [];
+
+  Future<void> _getPais() async {
+    final response =
+        await http.get(Uri.parse('https://tour-boost-api.vercel.app/pais'));
+
+    //print(response.body);
+
+    if (response.statusCode == 200) {
+      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
+      paises = parsed.map<Pais>((json) => Pais.fromJson(json)).toList();
+      setState(() {});
+    } else {
+      throw Exception('Failed to load Pais');
+    }
+  }
+
   //función asincrona modificar lugar
   void _modificar_lugar(
     int latitud,
@@ -97,7 +115,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
   //
 
   //función asincrona borrar lugar
-  void _borrarHotel(int rowIndex) async {
+  void _borrarLugar(int rowIndex) async {
     //nombre del hotel en función de la posición del array
     int idLugar = lugares[rowIndex].idLugar;
 
@@ -137,10 +155,46 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
   }
   //
 
+  //función asincrona crear pais
+  void _crearLugar(Map<String, Object> nuevoLugar) async {
+    print(nuevoLugar);
+    final response = await http.post(
+      Uri.parse('https://tour-boost-api.vercel.app/lugar'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(nuevoLugar),
+    );
+
+    //toast de respuesta
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Lugar creado correctamente",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          textColor: Colors.white,
+          fontSize: 16.0);
+      _getLugares();
+    } else {
+      Fluttertoast.showToast(
+          msg: "Error al crear el Lugar",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+  //
+
   @override
   void initState() {
     super.initState();
     _getLugares();
+    _getPais();
   }
 
   @override
@@ -227,6 +281,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
                           TextFormField(
                             controller: _latitudController,
                             decoration: InputDecoration(labelText: 'latitud'),
+                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Por favor, ingrese latitud';
@@ -238,6 +293,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
                           TextFormField(
                             controller: _longitudController,
                             decoration: InputDecoration(labelText: 'longitud'),
+                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Por favor, ingrese longitud';
@@ -269,27 +325,30 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
                             },
                           ),
                           const SizedBox(height: 15),
-                          TextFormField(
-                            controller: _nombreController,
-                            decoration: InputDecoration(labelText: 'nombre'),
+                          DropdownButtonFormField<String>(
+                            value: _paisController.text.isNotEmpty
+                                ? _paisController.text
+                                : null,
+                            items: paises.map<DropdownMenuItem<String>>((pais) {
+                              return DropdownMenuItem<String>(
+                                value: pais.nombre,
+                                child: Text(pais.nombre),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _paisController.text = value ?? '';
+                              });
+                            },
+                            decoration:
+                                const InputDecoration(labelText: 'Pais'),
                             validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor, ingrese el nombre';
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, seleccione un pais';
                               }
                               return null;
                             },
-                          ),
-                          const SizedBox(height: 15),
-                          TextFormField(
-                            controller: _paisController,
-                            decoration: InputDecoration(labelText: 'pais'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor, ingrese el pais';
-                              }
-                              return null;
-                            },
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -300,15 +359,16 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           final nuevolugar = {
-                            'latitud': _latitudController.text,
-                            'longitud': _longitudController.text,
+                            'latitud': double.parse(_latitudController.text),
+                            'longitud': double.parse(_longitudController.text),
                             'nombre': _nombreController.text,
                             'tipo_lugar': _tipolugarController.text,
-                            'pais': _paisController.text,
+                            'nombrePais': _paisController.text,
                           };
-                          setState(() {
-                            //print(nuevolugar);
-                          });
+
+                          _crearLugar(nuevolugar);
+                          //quitar el alert dialog
+                          Navigator.pop(context);
                         }
                       },
                     ),
