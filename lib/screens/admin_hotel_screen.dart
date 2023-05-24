@@ -442,7 +442,8 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                   hoteles[rowIndex].plazasTotales.toString();
               _direccionController.text = hoteles[rowIndex].direccion;
               _telefonoController.text = hoteles[rowIndex].telefono_contacto;
-              _plazas2Controller.text = hoteles[rowIndex].plazasDisponibles.toString();
+              _plazas2Controller.text =
+                  hoteles[rowIndex].plazasDisponibles.toString();
 
               //caja de texto para modificar el hotel
               showDialog(
@@ -450,99 +451,101 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('modificar hotel'),
-                    content: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextFormField(
-                            controller: _nombreController,
-                            decoration:
-                                const InputDecoration(labelText: 'Nombre'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor, ingrese el nombre';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          TextFormField(
-                            controller: _direccionController,
-                            decoration:
-                                const InputDecoration(labelText: 'Dirección'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor, ingrese la dirección';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          TextFormField(
-                            controller: _plazasController,
-                            decoration: const InputDecoration(
-                                labelText: 'Plazas Totales'),
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor, ingrese el número de plazas totales';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          TextFormField(
-                            controller: _plazas2Controller,
-                            decoration: const InputDecoration(
-                                labelText: 'Plazas Disponibles'),
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor, ingrese el número de plazas disponibles';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          TextFormField(
-                            controller: _telefonoController,
-                            decoration:
-                                const InputDecoration(labelText: 'Teléfono'),
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Por favor, ingrese el teléfono';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 15),
-                          DropdownButtonFormField<String>(
-                            value: _idLugarController.text.isNotEmpty
-                                ? _idLugarController.text
-                                : null,
-                            items:
-                                lugares.map<DropdownMenuItem<String>>((lugar) {
-                              return DropdownMenuItem<String>(
-                                value: lugar.idLugar.toString(),
-                                child: Text(lugar.nombre),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _idLugarController.text = value ?? '';
-                              });
-                            },
-                            decoration:
-                                const InputDecoration(labelText: 'Lugar'),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, seleccione un lugar';
-                              }
-                              return null;
-                            },
-                          )
-                        ],
+                    content: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: _nombreController,
+                              decoration:
+                                  const InputDecoration(labelText: 'Nombre'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese el nombre';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _direccionController,
+                              decoration:
+                                  const InputDecoration(labelText: 'Dirección'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese la dirección';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _plazasController,
+                              decoration: const InputDecoration(
+                                  labelText: 'Plazas Totales'),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese el número de plazas totales';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _plazas2Controller,
+                              decoration: const InputDecoration(
+                                  labelText: 'Plazas Disponibles'),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese el número de plazas disponibles';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _telefonoController,
+                              decoration:
+                                  const InputDecoration(labelText: 'Teléfono'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese el teléfono';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            DropdownButtonFormField<String>(
+                              value: _idLugarController.text.isNotEmpty
+                                  ? _idLugarController.text
+                                  : null,
+                              items: lugares
+                                  .map<DropdownMenuItem<String>>((lugar) {
+                                return DropdownMenuItem<String>(
+                                  value: lugar.idLugar.toString(),
+                                  child: Text(lugar.nombre),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _idLugarController.text = value ?? '';
+                                });
+                              },
+                              decoration:
+                                  const InputDecoration(labelText: 'Lugar'),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, seleccione un lugar';
+                                }
+                                return null;
+                              },
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     actions: [
@@ -556,7 +559,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             setState(() {
-                              _modificarHotel(                                  
+                              _modificarHotel(
                                   int.parse(_idLugarController.text),
                                   hoteles[rowIndex].idHotel,
                                   int.parse(_plazasController.text),

@@ -50,11 +50,12 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
 
   //función asincrona modificar lugar
   void _modificar_lugar(
-      int latitud,
-      int longitud,
-      int tipolugar,
-      String nombre,
-      String pais,) async {
+    int latitud,
+    int longitud,
+    String tipolugar,
+    String nombre,
+    String pais,
+  ) async {
     final nuevoLugar = {
       "latitud": latitud,
       "longitud": longitud,
@@ -136,7 +137,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
   }
   //
 
-    @override
+  @override
   void initState() {
     super.initState();
     _getLugares();
@@ -217,78 +218,80 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text('Crear nuevo lugar'),
-                  content: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          controller: _latitudController,
-                          decoration: InputDecoration(labelText: 'latitud'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese latitud';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _longitudController,
-                          decoration: InputDecoration(labelText: 'longitud'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese longitud';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _tipolugarController,
-                          decoration: InputDecoration(labelText: 'tipo_lugar'),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el tipo_lugar';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _nombreController,
-                          decoration: InputDecoration(labelText: 'nombre'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el nombre';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _nombreController,
-                          decoration: InputDecoration(labelText: 'nombre'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el nombre';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _paisController,
-                          decoration: InputDecoration(labelText: 'pais'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el pais';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
+                  content: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _latitudController,
+                            decoration: InputDecoration(labelText: 'latitud'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese latitud';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _longitudController,
+                            decoration: InputDecoration(labelText: 'longitud'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese longitud';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _tipolugarController,
+                            decoration:
+                                InputDecoration(labelText: 'tipo_lugar'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el tipo_lugar';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _nombreController,
+                            decoration: InputDecoration(labelText: 'nombre'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _nombreController,
+                            decoration: InputDecoration(labelText: 'nombre'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _paisController,
+                            decoration: InputDecoration(labelText: 'pais'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el pais';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   actions: [
@@ -331,8 +334,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
             onTap: () {
               //Navigator.pushNamed(context,
               //    'alert'); // <---- esta línea para navegar a la página 'alert'
-              setState(() {
-              });
+              setState(() {});
             },
             child: Container(
               color: Colors.redAccent, // <---- cambia el color a rojo

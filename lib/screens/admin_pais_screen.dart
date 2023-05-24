@@ -245,37 +245,39 @@ class _AdminPaisScreenState extends State<AdminPaisScreen> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Crear nuevo pais'),
-                  content: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          controller: _nombreController,
-                          decoration:
-                              const InputDecoration(labelText: 'Nombre'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el nombre';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          controller: _codigoController,
-                          decoration:
-                              const InputDecoration(labelText: 'Codigo pais'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el codigo';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
+                  content: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _nombreController,
+                            decoration:
+                                const InputDecoration(labelText: 'Nombre'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: _codigoController,
+                            decoration:
+                                const InputDecoration(labelText: 'Codigo pais'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el codigo';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   actions: [
