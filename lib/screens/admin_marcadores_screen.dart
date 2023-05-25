@@ -68,18 +68,20 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
 
   //función asincrona modificar lugar
   void _modificar_lugar(
-    int latitud,
-    int longitud,
+    double latitud,
+    double longitud,
     String tipolugar,
     String nombre,
     String pais,
+    int idLugar,
   ) async {
     final nuevoLugar = {
       "latitud": latitud,
       "longitud": longitud,
       "tipolugar": tipolugar,
       "nombre": nombre,
-      "pais": pais,
+      "nombrePais": pais,
+      "idLugar": idLugar
     };
 
     final response = await http.put(
@@ -93,7 +95,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
     //toast de respuesta
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
-          msg: "Hotel modificado correctamente",
+          msg: "Lugar modificado correctamente",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
@@ -103,7 +105,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
       _getLugares(); //recargo la vista
     } else {
       Fluttertoast.showToast(
-          msg: "Error al modificar el Hotel",
+          msg: "Error al modificar el Lugar",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
@@ -409,7 +411,131 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
             onTap: () {
-              //
+              _nombreController.text = lugares[rowIndex].nombre;
+              _latitudController.text = lugares[rowIndex].latitud.toString();
+              _longitudController.text = lugares[rowIndex].longitud.toString();
+              _tipolugarController.text = lugares[rowIndex].tipoLugar;
+              _paisController.text = lugares[rowIndex].nombrePais;
+
+              //caja de texto para modificar el pais
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('modificar pais'),
+                    content: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextFormField(
+                              controller: _latitudController,
+                              decoration: InputDecoration(labelText: 'latitud'),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese latitud';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _longitudController,
+                              decoration:
+                                  InputDecoration(labelText: 'longitud'),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese longitud';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _tipolugarController,
+                              decoration:
+                                  InputDecoration(labelText: 'tipo_lugar'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese el tipo_lugar';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            TextFormField(
+                              controller: _nombreController,
+                              decoration: InputDecoration(labelText: 'nombre'),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Por favor, ingrese el nombre';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 15),
+                            DropdownButtonFormField<String>(
+                              value: _paisController.text.isNotEmpty
+                                  ? _paisController.text
+                                  : null,
+                              items:
+                                  paises.map<DropdownMenuItem<String>>((pais) {
+                                return DropdownMenuItem<String>(
+                                  value: pais.nombre,
+                                  child: Text(pais.nombre),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _paisController.text = value ?? '';
+                                });
+                              },
+                              decoration:
+                                  const InputDecoration(labelText: 'Pais'),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Por favor, seleccione un pais';
+                                }
+                                return null;
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: const Center(
+                          child: Text(
+                            'Modificar',
+                            style: TextStyle(color: Colors.red, fontSize: 15),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            setState(() {
+                              _modificar_lugar(
+                                double.parse(_latitudController.text),
+                                double.parse(_longitudController.text),
+                                _tipolugarController.text,
+                                _nombreController.text,
+                                _paisController.text,
+                                lugares[rowIndex].idLugar,
+                              );
+
+                              //quitar el alert dialog
+                              Navigator.pop(context);
+                            });
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             child: Container(
               color: const Color.fromARGB(255, 134, 139, 133),
@@ -448,7 +574,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               alignment: Alignment.centerLeft,
               child: const Text(
-                'Tipo Lugar2',
+                'Tipo Lugar',
                 overflow: TextOverflow.ellipsis,
               ),
             ),
