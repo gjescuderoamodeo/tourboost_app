@@ -45,7 +45,7 @@ class CardTable2 extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, 'marcadores');
+              Navigator.pushNamed(context, 'adminrecomendacion');
             },
             child: const _SigleCard(
               color: Color.fromARGB(255, 201, 6, 222),

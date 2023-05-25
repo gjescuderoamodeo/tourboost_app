@@ -15,3 +15,4 @@ export 'package:tourboost_app/screens/hoteles_screen.dart';
 export 'package:tourboost_app/screens/hotel_screen.dart';
 export 'package:tourboost_app/screens/recomendaciones_screen.dart';
 export 'package:tourboost_app/screens/paises_screen.dart';
+export 'package:tourboost_app/screens/admin_recomendacion_screen.dart';
