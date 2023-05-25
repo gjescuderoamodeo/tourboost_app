@@ -40,7 +40,7 @@ class CardTable2 extends StatelessWidget {
             child: const _SigleCard(
               color: Color.fromARGB(255, 239, 221, 23),
               icon: Icons.star_purple500_outlined,
-              text: 'Administración marcadores',
+              text: 'Administración Lugares',
             ),
           ),
           GestureDetector(
