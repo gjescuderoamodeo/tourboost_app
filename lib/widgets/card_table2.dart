@@ -50,7 +50,7 @@ class CardTable2 extends StatelessWidget {
             child: const _SigleCard(
               color: Color.fromARGB(255, 201, 6, 222),
               icon: Icons.event_available_rounded,
-              text: 'Administración recomendaciones',
+              text: 'Administración recomendación',
             ),
           ),
         ]),
