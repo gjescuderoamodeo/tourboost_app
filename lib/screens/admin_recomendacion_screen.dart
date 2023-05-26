@@ -73,7 +73,7 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
     String imagen,
     String descripcion,
     String nombre,
-    int lugar,
+    String lugar,
     int idRecomendacion,
   ) async {
     final nuevorecomendacion = {
@@ -105,7 +105,7 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
       _getrecomendaciones(); //recargo la vista
     } else {
       Fluttertoast.showToast(
-          msg: "Error al modificar el recomendacion",
+          msg: "Error al modificar la recomendacion",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
@@ -159,7 +159,6 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
 
   //función asincrona crear lugar
   void _crearrecomendacion(Map<String, Object> nuevorecomendacion) async {
-    print(nuevorecomendacion);
     final response = await http.post(
       Uri.parse('https://tour-boost-api.vercel.app/recomendacion'),
       headers: <String, String>{
@@ -289,7 +288,6 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
                           TextFormField(
                             controller: _imagenController,
                             decoration: InputDecoration(labelText: 'imagen'),
-                            keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'Por favor, ingrese imagen';
@@ -355,11 +353,18 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
                       child: Text('OK'),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                          int idLugar = 1;
+                          for (var lugar in lugares) {
+                            if (lugar.nombre == _lugarController.text) {
+                              idLugar = lugar.idLugar;
+                            }
+                          }
+
                           final nuevorecomendacion = {
                             'imagen': _imagenController.text,
                             'descripcion': _descripcionController.text,
                             'nombre': _nombreController.text,
-                            'nombrePais': _lugarController.text,
+                            'idLugar': idLugar,
                           };
 
                           _crearrecomendacion(nuevorecomendacion);
@@ -513,7 +518,7 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
                                 _imagenController.text,
                                 _descripcionController.text,
                                 _nombreController.text,
-                                int.parse(_lugarController.text),
+                                _lugarController.text,
                                 recomendaciones[rowIndex].idRecomendacion,
                               );
 
