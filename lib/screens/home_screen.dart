@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _HomeBody()
         ],
       ),
-      bottomNavigationBar: CustomBottomNavigation(),
+      //bottomNavigationBar: CustomBottomNavigation(),
     );
   }
 }
