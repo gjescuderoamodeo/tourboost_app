@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../widgets/widgets.dart';
+import 'package:tourboost_app/services/auth_service.dart';
+import 'package:tourboost_app/theme/app_theme.dart';
+import 'package:tourboost_app/widgets/widgets.dart';
 
 class ConfiguracionesScreen extends StatelessWidget {
-  const ConfiguracionesScreen({super.key});
+  const ConfiguracionesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class ConfiguracionesScreen extends StatelessWidget {
           // Background
           Background(),
           // Home Body
-          _ConfBody()
+          _ConfBody(),
         ],
       ),
     );
@@ -30,134 +31,73 @@ class _ConfBody extends StatefulWidget {
 }
 
 class _ConfBodyState extends State<_ConfBody> {
-  final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController _nombreController = TextEditingController();
-
-  final TextEditingController _apellidosController = TextEditingController();
-
-  final TextEditingController _passwordController = TextEditingController();
-
-  final TextEditingController _repeatPasswordController =
-      TextEditingController();
-
-  bool _appliedChanges = false;
-
   @override
   void dispose() {
-    _nombreController.dispose();
-    _apellidosController.dispose();
-    _passwordController.dispose();
-    _repeatPasswordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _nombreController,
-              decoration: const InputDecoration(
-                  labelText: 'Nombre',
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, introduce tu nombre';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 5),
-            TextFormField(
-              controller: _apellidosController,
-              decoration: const InputDecoration(
-                  labelText: 'Apellidos',
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, introduce tus apellidos';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 5),
-            TextFormField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                  labelText: 'Contraseña',
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, introduce una contraseña';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 5),
-            TextFormField(
-              controller: _repeatPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                  labelText: 'Repetir Contraseña',
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, repite tu contraseña';
-                }
-                if (value != _passwordController.text) {
-                  return 'Las contraseñas no coinciden';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      title: const Text('¿Quieres aplicar los cambios?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancelar'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _appliedChanges = true;
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Aplicar cambios'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-              child: const Text('Aplicar cambios'),
-            ),
-            if (_appliedChanges)
-              const Text(
-                'Cambios aplicados',
-                style: TextStyle(color: Colors.green),
-              ),
-          ],
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 50,
+          ),
+          ConfigurarUsuarioCard(),
+          const SizedBox(
+            height: 10,
+          ),
+          BorrarCuentaCard(),
+        ],
+      ),
+    );
+  }
+}
+
+class ConfigurarUsuarioCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shadowColor: AppTheme.secundary,
+      elevation: 10,
+      child: ListTile(
+        title: const Center(
+          child: Text(
+            'Configurar usuario',
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+          ),
         ),
+        onTap: () async {
+          //ir a configuracion screen
+          final AuthService authService = AuthService();
+
+          //obtener token
+          final token = await authService.readToken();
+          final userId = authService.getUserIdFromToken(token);
+
+          Navigator.pushNamed(context, 'configuracion', arguments: userId);
+        },
+      ),
+    );
+  }
+}
+
+class BorrarCuentaCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shadowColor: AppTheme.secundary,
+      color: AppTheme.alert,
+      elevation: 10,
+      child: ListTile(
+        title: const Center(
+          child: Text('Borrar cuenta',
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+        ),
+        onTap: () {
+          // Acción cuando se toque la tarjeta "Borrar cuenta"
+        },
       ),
     );
   }
