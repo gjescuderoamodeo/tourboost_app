@@ -33,7 +33,7 @@ class _HomeScreen2State extends State<HomeScreen2> {
 
                   //navegar a la pantalla de Configuración
                   if (item == SampleItem2.itemOne) {
-                    Navigator.pushNamed(context, 'configuracion');
+                    Navigator.pushNamed(context, 'configuraciones');
                   }
                   //logout
                   if (item == SampleItem2.itemThree) {
@@ -55,10 +55,6 @@ class _HomeScreen2State extends State<HomeScreen2> {
                         Icon(Icons.build_rounded, color: Colors.black)
                       ],
                     ),
-                  ),
-                  const PopupMenuItem<SampleItem2>(
-                    value: SampleItem2.itemTwo,
-                    child: Text('Item 2'),
                   ),
                   PopupMenuItem<SampleItem2>(
                     value: SampleItem2.itemThree,
