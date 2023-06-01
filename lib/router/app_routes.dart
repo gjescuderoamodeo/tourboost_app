@@ -39,6 +39,11 @@ class AppRoutes {
         screen: ConfiguracionScreen(),
         icon: Icons.room_preferences),
     MenuOption(
+        route: 'configuraciones',
+        name: 'configuraciones Screen',
+        screen: ConfiguracionesScreen(),
+        icon: Icons.room_preferences),
+    MenuOption(
         route: 'adminhotel',
         name: 'admin hotel Screen',
         screen: AdminHotelScreen(),

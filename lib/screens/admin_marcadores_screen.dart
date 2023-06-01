@@ -241,10 +241,6 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
                       ],
                     ),
                   ),
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.itemTwo,
-                    child: Text('Item 2'),
-                  ),
                   PopupMenuItem<SampleItem>(
                     value: SampleItem.itemThree,
                     child: Row(

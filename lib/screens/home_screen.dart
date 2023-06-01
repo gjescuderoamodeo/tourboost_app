@@ -3,7 +3,7 @@ import 'package:tourboost_app/screens/screens.dart';
 import '../services/services.dart';
 import '../widgets/widgets.dart';
 
-enum SampleItem { itemOne, itemTwo, itemThree }
+enum SampleItem { itemOne, itemThree }
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -55,10 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         Icon(Icons.build_rounded, color: Colors.black)
                       ],
                     ),
-                  ),
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.itemTwo,
-                    child: Text('Item 2'),
                   ),
                   PopupMenuItem<SampleItem>(
                     value: SampleItem.itemThree,

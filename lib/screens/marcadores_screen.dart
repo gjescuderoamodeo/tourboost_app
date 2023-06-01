@@ -66,10 +66,7 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
     final token = await authService.readToken();
     final userId = authService.getUserIdFromToken(token);
 
-    final body = {
-      'idLugar': idLugar,
-      'idUsuario':userId
-    };
+    final body = {'idLugar': idLugar, 'idUsuario': userId};
 
     final response = await http.delete(
       Uri.parse('https://tour-boost-api.vercel.app/marcador'),
@@ -89,7 +86,7 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
           backgroundColor: const Color.fromARGB(255, 168, 239, 4),
           textColor: Colors.white,
           fontSize: 16.0);
-          lugares.clear();
+      lugares.clear();
       _getMarcadores(); //recargo la vista
     } else {
       Fluttertoast.showToast(
@@ -104,7 +101,7 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
   }
   //
 
-    @override
+  @override
   void initState() {
     super.initState();
     _getMarcadores();
@@ -139,7 +136,7 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
 
                   //navegar a la pantalla de Configuración
                   if (item == SampleItem.itemOne) {
-                    Navigator.pushNamed(context, 'configuracion');
+                    Navigator.pushNamed(context, 'configuraciones');
                   }
                   //logout
                   if (item == SampleItem.itemThree) {
@@ -161,10 +158,6 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
                         Icon(Icons.build_rounded, color: Colors.black)
                       ],
                     ),
-                  ),
-                  const PopupMenuItem<SampleItem>(
-                    value: SampleItem.itemTwo,
-                    child: Text('Item 2'),
                   ),
                   PopupMenuItem<SampleItem>(
                     value: SampleItem.itemThree,
@@ -260,7 +253,6 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
     );
   }
 }
-
 
 class LugarDataSource extends DataGridSource {
   LugarDataSource({required List<Lugar> lugares}) {
