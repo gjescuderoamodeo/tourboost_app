@@ -6,6 +6,7 @@ class AppTheme {
   static const Color primary = Colors.indigo;
   static const Color secundary = Color.fromARGB(255, 73, 32, 233);
   static const Color terciary = Color.fromARGB(255, 63, 8, 165);
+  static const Color alert = Color.fromARGB(255, 240, 48, 44);
   TextTheme Logo = GoogleFonts.lobsterTextTheme().copyWith(
     bodyText1: TextStyle(
       color: Colors.white,
