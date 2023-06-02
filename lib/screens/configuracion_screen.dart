@@ -53,30 +53,24 @@ Future<void> _getUserId() async {
 }
 
 //obtener usuario api
-Future<void> _getusuario() async {
+Future<void> _getUsuario() async {
   final response = await http
       .get(Uri.parse('https://tour-boost-api.vercel.app/usuario/$_idUser'));
 
-  //print(response.body);
+  print(response);   
 
   if (response.statusCode == 200) {
-    final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-    Usuario usuario = parsed.map<Usuario>((json) => Usuario.fromJson(json));
+    final parsed = json.decode(response.body) as Map<String, dynamic>;
+    Usuario usuario = Usuario.fromJson(parsed);
 
-    //cargo los datos del formulario
     _nombreController.text = usuario.nombre;
     _apellidosController.text = usuario.apellidos;
     _correoController.text = usuario.correo;
-
-    /*    setState(() {
-      _nombreController.text = usuario.nombre;
-      _apellidosController.text = usuario.apellidos;
-      _correoController.text = usuario.correo;
-    }); */
   } else {
     throw Exception('Failed to load usuario');
   }
 }
+
 
 final _formKey = GlobalKey<FormState>();
 
@@ -98,7 +92,7 @@ class _ConfBodyState extends State<_ConfBody> {
     _passwordController = TextEditingController();
     _repeatPasswordController = TextEditingController();
     _getUserId();
-    _getusuario();
+    _getUsuario();
   }
 
   @override
