@@ -10,7 +10,7 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class HotelScreen extends StatefulWidget {
-  const HotelScreen({super.key});
+  const HotelScreen({Key? key}) : super(key: key);
 
   //Text('Nombre del hotel: ${datos["nombre"]}'),
 
@@ -43,7 +43,6 @@ class _HotelScreenState extends State<HotelScreen> {
     setState(() {
       _selectedRange = newDateRange;
     });
-
     //se ejecuta al darle a guardar
     //print('La fecha seleccionada es $_selectedRange');
   }
@@ -68,7 +67,8 @@ class _HotelScreenState extends State<HotelScreen> {
       "fecha_inicio": fecha_inicio,
       "fecha_fin": fecha_fin,
       "idHotel": idHotel,
-      "numeroReservantes": numeroReservantes,
+      "numeroPersonas": numeroReservantes,
+      "expirado":false,
     };
 
     final response = await http.post(
@@ -137,7 +137,7 @@ class _HotelScreenState extends State<HotelScreen> {
 
                   //navegar a la pantalla de Configuración
                   if (item == SampleItem.itemOne) {
-                    Navigator.pushNamed(context, 'configuracion');
+                    Navigator.pushNamed(context, 'configuraciones');
                   }
                   //logout
                   if (item == SampleItem.itemThree) {
@@ -210,7 +210,7 @@ class _HotelScreenState extends State<HotelScreen> {
                         TextButton(
                           child: const Text('Elegir fecha'),
                           onPressed: () async {
-                            _presentDateRangePicker(context);
+                            await _presentDateRangePicker(context);
                             setState(() {});
                           },
                         ),

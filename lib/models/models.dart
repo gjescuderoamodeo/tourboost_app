@@ -7,3 +7,5 @@ export 'package:tourboost_app/models/paises.dart';
 export 'package:tourboost_app/models/recomendaciones.dart';
 export 'package:tourboost_app/models/reserva.dart';
 export 'package:tourboost_app/models/marcador.dart';
+export 'package:tourboost_app/models/usuarios.dart';
+

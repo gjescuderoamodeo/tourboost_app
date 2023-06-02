@@ -76,7 +76,7 @@ class ConfigurarUsuarioCard extends StatelessWidget {
           final token = await authService.readToken();
           final userId = authService.getUserIdFromToken(token);
 
-          Navigator.pushNamed(context, 'configuracion', arguments: userId);
+          Navigator.pushNamed(context, 'configuracion');
         },
       ),
     );
@@ -92,7 +92,7 @@ class BorrarCuentaCard extends StatelessWidget {
       elevation: 10,
       child: ListTile(
         title: const Center(
-          child: Text('Borrar cuenta',
+          child: Text('Cancelar cuenta',
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
         ),
         onTap: () {
