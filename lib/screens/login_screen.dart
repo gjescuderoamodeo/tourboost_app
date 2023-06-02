@@ -147,7 +147,7 @@ class _LoginForm extends StatelessWidget {
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 3,
                               backgroundColor:
-                                  const Color.fromARGB(255, 239, 4, 4),
+                                  AppTheme.alert,
                               textColor: Colors.white,
                               fontSize: 16.0);
                           //NotificationsService.showSnackbar(errorMessage);

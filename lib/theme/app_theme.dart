@@ -7,6 +7,10 @@ class AppTheme {
   static const Color secundary = Color.fromARGB(255, 73, 32, 233);
   static const Color terciary = Color.fromARGB(255, 63, 8, 165);
   static const Color alert = Color.fromARGB(255, 240, 48, 44);
+  static const Color submitButton = Colors.green;
+  static const Color deleteButton = Colors.redAccent;
+  static const Color settingsButton = Colors.redAccent;
+  static const Color inputForm = Color.fromARGB(255, 243, 229, 244);
   TextTheme Logo = GoogleFonts.lobsterTextTheme().copyWith(
     bodyText1: TextStyle(
       color: Colors.white,

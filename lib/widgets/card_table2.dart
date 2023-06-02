@@ -48,7 +48,7 @@ class CardTable2 extends StatelessWidget {
               Navigator.pushNamed(context, 'adminrecomendacion');
             },
             child: const _SigleCard(
-              color: Color.fromARGB(255, 201, 6, 222),
+              color: Color.fromARGB(255, 119, 20, 130),
               icon: Icons.event_available_rounded,
               text: 'Administración recomendación',
             ),

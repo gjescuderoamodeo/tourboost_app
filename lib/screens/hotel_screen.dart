@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/screens/screens.dart';
 import 'package:tourboost_app/services/services.dart';
+import 'package:tourboost_app/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -86,7 +87,7 @@ class _HotelScreenState extends State<HotelScreen> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
-          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+          backgroundColor: AppTheme.submitButton,
           textColor: Colors.white,
           fontSize: 16.0);
     } else {
@@ -95,7 +96,7 @@ class _HotelScreenState extends State<HotelScreen> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 3,
-          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
+          backgroundColor: AppTheme.alert,
           textColor: Colors.white,
           fontSize: 16.0);
     }
@@ -240,7 +241,7 @@ class _HotelScreenState extends State<HotelScreen> {
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
                                 backgroundColor:
-                                    const Color.fromARGB(255, 251, 0, 0),
+                                    AppTheme.alert,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else if (numeroReserva <= 0) {
@@ -250,7 +251,7 @@ class _HotelScreenState extends State<HotelScreen> {
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
                                 backgroundColor:
-                                    const Color.fromARGB(255, 251, 0, 0),
+                                    AppTheme.alert,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else {

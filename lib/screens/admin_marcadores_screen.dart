@@ -395,7 +395,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
               _borrarLugar(rowIndex);
             },
             child: Container(
-              color: Colors.redAccent, // <---- cambia el color a rojo
+              color: AppTheme.deleteButton, // <---- cambia el color a rojo
               child: const Center(
                 child: Icon(Icons.delete), // <---- cambia el icono a borrar
               ),
@@ -507,7 +507,7 @@ class _AdminMarcadoresScreenState extends State<AdminMarcadoresScreen> {
                         child: const Center(
                           child: Text(
                             'Modificar',
-                            style: TextStyle(color: Colors.red, fontSize: 15),
+                            style: TextStyle(color: AppTheme.alert, fontSize: 15),
                           ),
                         ),
                         onPressed: () {

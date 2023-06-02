@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tourboost_app/models/models.dart';
 import 'package:tourboost_app/services/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:tourboost_app/theme/app_theme.dart';
 import 'dart:convert';
 
 import '../widgets/widgets.dart';
@@ -118,7 +119,7 @@ class _ConfBodyState extends State<_ConfBody> {
               decoration: const InputDecoration(
                   labelText: 'Nombre',
                   filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
+                  fillColor: AppTheme.inputForm),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor, introduce tu nombre';
@@ -132,7 +133,7 @@ class _ConfBodyState extends State<_ConfBody> {
               decoration: const InputDecoration(
                   labelText: 'Apellidos',
                   filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
+                  fillColor: AppTheme.inputForm),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor, introduce tus apellidos';
@@ -146,7 +147,7 @@ class _ConfBodyState extends State<_ConfBody> {
               decoration: const InputDecoration(
                   labelText: 'Correo',
                   filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
+                  fillColor: AppTheme.inputForm),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor, introduce tu correo';
@@ -161,7 +162,7 @@ class _ConfBodyState extends State<_ConfBody> {
               decoration: const InputDecoration(
                   labelText: 'Contraseña',
                   filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
+                  fillColor: AppTheme.inputForm),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor, introduce una contraseña';
@@ -176,7 +177,7 @@ class _ConfBodyState extends State<_ConfBody> {
               decoration: const InputDecoration(
                   labelText: 'Repetir Contraseña',
                   filled: true,
-                  fillColor: Color.fromARGB(255, 229, 184, 233)),
+                  fillColor: AppTheme.inputForm),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor, repite tu contraseña';
@@ -221,7 +222,7 @@ class _ConfBodyState extends State<_ConfBody> {
             if (_appliedChanges)
               const Text(
                 'Cambios aplicados',
-                style: TextStyle(color: Colors.green),
+                style: TextStyle(color: AppTheme.submitButton),
               ),
           ],
         ),

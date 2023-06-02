@@ -269,8 +269,8 @@ class _RecomendacionScreenState extends State<RecomendacionScreen> {
                   }
                 },
                 splashColor: _favorito
-                    ? Color.fromARGB(255, 223, 17, 6)
-                    : const Color.fromARGB(255, 17, 236, 2),
+                    ? AppTheme.alert
+                    : AppTheme.submitButton,
                 child: Container(
                   height: 40,
                   child: Row(
