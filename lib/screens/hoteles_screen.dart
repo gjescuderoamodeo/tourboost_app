@@ -66,7 +66,7 @@ class _HotelesScreenState extends State<HotelesScreen> {
 
                   //navegar a la pantalla de Configuración
                   if (item == SampleItem.itemOne) {
-                    Navigator.pushNamed(context, 'configuracion');
+                    Navigator.pushNamed(context, 'configuraciones');
                   }
                   //logout
                   if (item == SampleItem.itemThree) {

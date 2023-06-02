@@ -126,7 +126,7 @@ class _MapScreenState extends State<MapScreen> {
 
                   //navegar a la pantalla de Configuración
                   if (item == SampleItem4.itemOne) {
-                    Navigator.pushNamed(context, 'configuracion');
+                    Navigator.pushNamed(context, 'configuraciones');
                   }
                   //logout
                   if (item == SampleItem4.itemThree) {
