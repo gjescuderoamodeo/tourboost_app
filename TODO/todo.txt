@@ -4,4 +4,4 @@ cuando llegue la reserva a la fecha final, que se elimine
 
 -comprobar update pais funciona
 
--Añadir borrar usuario / cancelar cuenta
+-comprobar hay hueco libre en el hotel para reservas salga rojo
