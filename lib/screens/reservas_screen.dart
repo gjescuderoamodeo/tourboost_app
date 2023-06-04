@@ -207,7 +207,7 @@ class _ReservasScreenState extends State<ReservasScreen> {
         columnWidthMode: ColumnWidthMode.fill,
         allowSwiping: true,
         swipeMaxOffset: 100,
-        endSwipeActionsBuilder:
+        /*endSwipeActionsBuilder:
             (BuildContext context, DataGridRow row, int rowIndex) {
           return GestureDetector(
             onTap: () {
@@ -224,7 +224,7 @@ class _ReservasScreenState extends State<ReservasScreen> {
               ),
             ),
           );
-        },
+        },*/
         //al desplazarse al otro lado
         startSwipeActionsBuilder:
             (BuildContext context, DataGridRow row, int rowIndex) {
