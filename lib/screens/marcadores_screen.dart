@@ -10,26 +10,26 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 
 class MarcadoresScreen extends StatefulWidget {
-  const MarcadoresScreen({super.key});
+  const MarcadoresScreen({Key? key}) : super(key: key);
 
   @override
   State<MarcadoresScreen> createState() => _MarcadoresScreenState();
 }
 
 class _MarcadoresScreenState extends State<MarcadoresScreen> {
-  //variable menú desplegable
+  // Variable menú desplegable
   SampleItem? selectedMenu;
 
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
 
-  //obtener reservas api
+  // Obtener reservas de la API
   List<Lugar> lugares = [];
 
   Future<void> _getMarcadores() async {
     final AuthService authService = AuthService();
 
-    //obtener token
+    // Obtener token
     final token = await authService.readToken();
     final userId = authService.getUserIdFromToken(token);
 
@@ -41,7 +41,7 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
 
       for (var marcadorJson in marcadoresJson) {
         final int idLugar = marcadorJson['idLugar'];
-        //ahora llamada a sacar lugar por id
+        // Llamada para obtener el lugar por su id
         final response2 = await http
             .get(Uri.parse('https://tour-boost-api.vercel.app/lugar/$idLugar'));
 
@@ -57,12 +57,12 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
     }
   }
 
-  //función asincrona borrar marcador favorito
+  // Función asincrónica para borrar un marcador favorito
   void _borrarMarcadorF(int rowIndex) async {
     int idLugar = lugares[rowIndex].idLugar;
     final AuthService authService = AuthService();
 
-    //obtener token
+    // Obtener token
     final token = await authService.readToken();
     final userId = authService.getUserIdFromToken(token);
 
@@ -76,30 +76,31 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
       body: jsonEncode(body),
     );
 
-    //toast de respuesta
+    // Toast de respuesta
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
-          msg: "Marcador favorito borrado correctamente",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 3,
-          backgroundColor: const Color.fromARGB(255, 168, 239, 4),
-          textColor: Colors.white,
-          fontSize: 16.0);
+        msg: "Marcador favorito borrado correctamente",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        backgroundColor: const Color.fromARGB(255, 168, 239, 4),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       lugares.clear();
-      _getMarcadores(); //recargo la vista
+      _getMarcadores(); // Recargar la vista
     } else {
       Fluttertoast.showToast(
-          msg: "Error al borrar el marcador",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 3,
-          backgroundColor: const Color.fromARGB(255, 251, 0, 0),
-          textColor: Colors.white,
-          fontSize: 16.0);
+        msg: "Error al borrar el marcador",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 3,
+        backgroundColor: const Color.fromARGB(255, 239, 4, 4),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
   }
-  //
 
   @override
   void initState() {
@@ -108,13 +109,30 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
   }
 
   @override
+  void dispose() {
+    _nombreController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    /*final List<Lugar> lugares = marcadoresUser.map((lugarData) {
-      return Lugar(
-        nombreLugar: lugarData['nombreLugar'],
-        name: lugarData['nombre'],
+    if (lugares.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          elevation: 2,
+          title: const Text(
+            "Mis marcadores favoritos",
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+        body: const Center(
+          child: Text(
+            "No tienes Marcadores",
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          ),
+        ),
       );
-    }).toList();*/
+    }
 
     return Scaffold(
       appBar: AppBar(

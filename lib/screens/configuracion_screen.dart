@@ -58,7 +58,7 @@ Future<void> _getUsuario() async {
   final response = await http
       .get(Uri.parse('https://tour-boost-api.vercel.app/usuario/$_idUser'));
 
-  print(response);   
+  //print(response.statusCode);
 
   if (response.statusCode == 200) {
     final parsed = json.decode(response.body) as Map<String, dynamic>;
@@ -71,7 +71,6 @@ Future<void> _getUsuario() async {
     throw Exception('Failed to load usuario');
   }
 }
-
 
 final _formKey = GlobalKey<FormState>();
 
