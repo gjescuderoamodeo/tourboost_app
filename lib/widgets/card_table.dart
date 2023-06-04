@@ -46,7 +46,7 @@ class CardTable extends StatelessWidget {
               Navigator.pushNamed(context, 'reservas');
             },
             child: const _SigleCard(
-              color: Color.fromARGB(255, 203, 186, 0),
+              color: Color.fromARGB(255, 210, 121, 194),
               icon: Icons.hotel_rounded,
               text: 'Mis reservas hotel',
             ),
