@@ -5,3 +5,5 @@ cuando llegue la reserva a la fecha final, que se elimine
 -comprobar update pais funciona
 
 -comprobar hay hueco libre en el hotel para reservas salga rojo
+
+-añadir recomendaciones a londres
