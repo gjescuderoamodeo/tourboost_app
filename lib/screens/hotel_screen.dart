@@ -69,7 +69,7 @@ class _HotelScreenState extends State<HotelScreen> {
       "fecha_fin": fecha_fin,
       "idHotel": idHotel,
       "numeroPersonas": numeroReservantes,
-      "expirado":false,
+      "expirado": false,
     };
 
     final response = await http.post(
@@ -240,8 +240,7 @@ class _HotelScreenState extends State<HotelScreen> {
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor:
-                                    AppTheme.alert,
+                                backgroundColor: AppTheme.alert,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else if (numeroReserva <= 0) {
@@ -250,8 +249,7 @@ class _HotelScreenState extends State<HotelScreen> {
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor:
-                                    AppTheme.alert,
+                                backgroundColor: AppTheme.alert,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
                           } else {
@@ -277,10 +275,12 @@ class _HotelScreenState extends State<HotelScreen> {
           ),
           //opcion ver en el mapa el hotel
           ListTile(
+            hoverColor: AppTheme.settingsButton,
             title: const Text(
               'Ver en el Mapa',
               style: TextStyle(fontSize: 20),
             ),
+            subtitle: Text(datos.direccion),
             trailing: const Icon(Icons.map),
             onTap: () async {
               final url =
@@ -291,6 +291,26 @@ class _HotelScreenState extends State<HotelScreen> {
                 throw 'No se pudo abrir el mapa.';
               }
             },
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          ),
+          //opcion llamar al hotel
+          ListTile(
+            title: const Text(
+              'Llamar por telefono',
+              style: TextStyle(fontSize: 20),
+            ),
+            subtitle: Text(datos.telefono_contacto),
+            trailing: const Icon(Icons.call),
+            /*onTap: () async {
+              final url =
+                  'https://www.google.com/maps/search/?api=1&query=$dirrecionHotel';
+              if (await canLaunch(url)) {
+                await launch(url);
+              } else {
+                throw 'No se pudo abrir el mapa.';
+              }
+            },*/
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           ),
