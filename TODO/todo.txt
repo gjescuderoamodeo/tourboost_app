@@ -1,9 +1,5 @@
 cuando llegue la reserva a la fecha final, que se elimine
 
--Terminar user update
-
--comprobar update pais funciona
+-cuando se introduce un correo y no se encuentra, advertencia
 
 -comprobar hay hueco libre en el hotel para reservas salga rojo
-
--añadir recomendaciones a londres
