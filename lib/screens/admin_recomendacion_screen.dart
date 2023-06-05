@@ -504,7 +504,7 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
                         child: const Center(
                           child: Text(
                             'Modificar',
-                            style: TextStyle(color: Colors.red, fontSize: 15),
+                            style: TextStyle(color: AppTheme.alert, fontSize: 15),
                           ),
                         ),
                         onPressed: () {
@@ -530,7 +530,7 @@ class _AdminRecomendacionScreenState extends State<AdminRecomendacionScreen> {
               );
             },
             child: Container(
-              color: const Color.fromARGB(255, 134, 139, 133),
+              color: AppTheme.settingsButton,
               child: const Center(
                 child: Icon(Icons.settings),
               ),

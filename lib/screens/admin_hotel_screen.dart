@@ -576,7 +576,7 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
               );
             },
             child: Container(
-              color: const Color.fromARGB(255, 134, 139, 133),
+              color: AppTheme.settingsButton,
               child: const Center(
                 child: Icon(Icons.settings),
               ),
