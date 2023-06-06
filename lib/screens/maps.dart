@@ -132,8 +132,9 @@ class _MapScreenState extends State<MapScreen> {
                   if (item == SampleItem4.itemThree) {
                     final AuthService authService = AuthService();
                     authService.logout();
-
-                    Navigator.pushNamed(context, 'login');
+                    
+                    Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+                    //Navigator.pushNamed(context, 'login');
                   }
                 },
                 icon: const Icon(Icons.person),

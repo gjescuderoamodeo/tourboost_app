@@ -145,7 +145,9 @@ class _HotelScreenState extends State<HotelScreen> {
                     final AuthService authService = AuthService();
                     authService.logout();
 
-                    Navigator.pushNamed(context, 'login');
+                    
+                    Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+                    //Navigator.pushNamed(context, 'login');
                   }
                 },
                 icon: const Icon(Icons.person),

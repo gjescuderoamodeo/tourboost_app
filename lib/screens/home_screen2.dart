@@ -39,8 +39,9 @@ class _HomeScreen2State extends State<HomeScreen2> {
                   if (item == SampleItem2.itemThree) {
                     final AuthService authService = AuthService();
                     authService.logout();
-
-                    Navigator.pushNamed(context, 'login');
+                    
+                    Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+                    //Navigator.pushNamed(context, 'login');
                   }
                 },
                 icon: const Icon(Icons.person),
