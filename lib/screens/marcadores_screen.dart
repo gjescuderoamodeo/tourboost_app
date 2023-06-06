@@ -160,8 +160,9 @@ class _MarcadoresScreenState extends State<MarcadoresScreen> {
                   if (item == SampleItem.itemThree) {
                     final AuthService authService = AuthService();
                     authService.logout();
-
-                    Navigator.pushNamed(context, 'login');
+                    
+                    Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+                    //Navigator.pushNamed(context, 'login');
                   }
                 },
                 icon: const Icon(Icons.person),
