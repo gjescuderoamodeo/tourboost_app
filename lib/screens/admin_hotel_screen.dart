@@ -237,8 +237,9 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
                   if (item == SampleItem.itemThree) {
                     final AuthService authService = AuthService();
                     authService.logout();
-                    
-                    Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, 'login', (route) => false);
                     //Navigator.pushNamed(context, 'login');
                   }
                 },
@@ -284,84 +285,88 @@ class _AdminHotelScreenState extends State<AdminHotelScreen> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Crear nuevo hotel'),
-                  content: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                          controller: _nombreController,
-                          decoration:
-                              const InputDecoration(labelText: 'Nombre'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el nombre';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _direccionController,
-                          decoration:
-                              const InputDecoration(labelText: 'Dirección'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese la dirección';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _plazasController,
-                          decoration:
-                              const InputDecoration(labelText: 'Plazas'),
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el número de plazas';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        TextFormField(
-                          controller: _telefonoController,
-                          decoration:
-                              const InputDecoration(labelText: 'Teléfono'),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Por favor, ingrese el teléfono';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 15),
-                        DropdownButtonFormField<String>(
-                          value: _idLugarController.text.isNotEmpty
-                              ? _idLugarController.text
-                              : null,
-                          items: lugares.map<DropdownMenuItem<String>>((lugar) {
-                            return DropdownMenuItem<String>(
-                              value: lugar.idLugar.toString(),
-                              child: Text(lugar.nombre),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _idLugarController.text = value ?? '';
-                            });
-                          },
-                          decoration: const InputDecoration(labelText: 'Lugar'),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Por favor, seleccione un lugar';
-                            }
-                            return null;
-                          },
-                        )
-                      ],
+                  content: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: _nombreController,
+                            decoration:
+                                const InputDecoration(labelText: 'Nombre'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _direccionController,
+                            decoration:
+                                const InputDecoration(labelText: 'Dirección'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese la dirección';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _plazasController,
+                            decoration:
+                                const InputDecoration(labelText: 'Plazas'),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el número de plazas';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          TextFormField(
+                            controller: _telefonoController,
+                            decoration:
+                                const InputDecoration(labelText: 'Teléfono'),
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Por favor, ingrese el teléfono';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          DropdownButtonFormField<String>(
+                            value: _idLugarController.text.isNotEmpty
+                                ? _idLugarController.text
+                                : null,
+                            items:
+                                lugares.map<DropdownMenuItem<String>>((lugar) {
+                              return DropdownMenuItem<String>(
+                                value: lugar.idLugar.toString(),
+                                child: Text(lugar.nombre),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _idLugarController.text = value ?? '';
+                              });
+                            },
+                            decoration:
+                                const InputDecoration(labelText: 'Lugar'),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, seleccione un lugar';
+                              }
+                              return null;
+                            },
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   actions: [
